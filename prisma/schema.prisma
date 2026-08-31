@@ -1,0 +1,383 @@
+// StockPilot Master Database Schema
+// Datasource: PostgreSQL
+// ORM: Prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  INVENTORY_MANAGER
+  WAREHOUSE_OPERATOR
+  PROCUREMENT_MANAGER
+  OPERATIONS_MANAGER
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+}
+
+enum WarehouseStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+}
+
+enum OrderStatus {
+  CREATED
+  CONFIRMED
+  RESERVED
+  PROCESSING
+  FULFILLED
+  CANCELLED
+}
+
+enum MovementType {
+  RECEIPT
+  ADJUSTMENT
+  TRANSFER_IN
+  TRANSFER_OUT
+  RESERVATION
+  RELEASE
+  FULFILLMENT
+  RETURN
+}
+
+enum TransferStatus {
+  PENDING
+  IN_TRANSIT
+  COMPLETED
+  CANCELLED
+}
+
+enum ReservationStatus {
+  ACTIVE
+  RELEASED
+  CONSUMED
+  CANCELLED
+}
+
+enum AnomalySeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AnomalyStatus {
+  DETECTED
+  INVESTIGATING
+  RESOLVED
+  DISMISSED
+}
+
+enum RiskSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RecommendationStatus {
+  GENERATED
+  REVIEWED
+  APPROVED
+  EXECUTED
+  REJECTED
+  DISMISSED
+  EXPIRED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(WAREHOUSE_OPERATOR)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  movements InventoryMovement[]
+  audits    AuditRecord[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id              String        @id @default(uuid())
+  sku             String        @unique
+  name            String
+  description     String?
+  unit            String        @default("units")
+  status          ProductStatus @default(ACTIVE)
+  reorderPoint    Int           @default(10)
+  reorderQuantity Int           @default(50)
+  categoryId      String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  category         Category?          @relation(fields: [categoryId], references: [id])
+  inventories      Inventory[]
+  movements        InventoryMovement[]
+  transfers        InventoryTransfer[]
+  supplierProducts SupplierProduct[]
+  orderItems       OrderItem[]
+  forecasts        Forecast[]
+
+  @@map("products")
+}
+
+model Warehouse {
+  id        String          @id @default(uuid())
+  name      String          @unique
+  location  String
+  capacity  Int             @default(10000)
+  status    WarehouseStatus @default(ACTIVE)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  inventories        Inventory[]
+  movements          InventoryMovement[]
+  sourceTransfers    InventoryTransfer[] @relation("SourceWarehouse")
+  destTransfers      InventoryTransfer[] @relation("DestinationWarehouse")
+  orders             Order[]
+  forecasts          Forecast[]
+
+  @@map("warehouses")
+}
+
+model Inventory {
+  id                String   @id @default(uuid())
+  productId         String
+  warehouseId       String
+  physicalQuantity  Int      @default(0)
+  reservedQuantity  Int      @default(0)
+  availableQuantity Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  product      Product                @relation(fields: [productId], references: [id])
+  warehouse    Warehouse              @relation(fields: [warehouseId], references: [id])
+  reservations InventoryReservation[]
+
+  @@unique([productId, warehouseId])
+  @@map("inventories")
+}
+
+model InventoryMovement {
+  id           String       @id @default(uuid())
+  productId    String
+  warehouseId  String
+  movementType MovementType
+  quantity     Int
+  reference    String?
+  actorId      String?
+  createdAt    DateTime     @default(now())
+
+  product   Product   @relation(fields: [productId], references: [id])
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+  actor     User?     @relation(fields: [actorId], references: [id])
+
+  @@map("inventory_movements")
+}
+
+model InventoryTransfer {
+  id                     String         @id @default(uuid())
+  productId              String
+  sourceWarehouseId      String
+  destinationWarehouseId String
+  quantity               Int
+  status                 TransferStatus @default(PENDING)
+  actorId                String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+
+  product              Product   @relation(fields: [productId], references: [id])
+  sourceWarehouse      Warehouse @relation("SourceWarehouse", fields: [sourceWarehouseId], references: [id])
+  destinationWarehouse Warehouse @relation("DestinationWarehouse", fields: [destinationWarehouseId], references: [id])
+
+  @@map("inventory_transfers")
+}
+
+model InventoryReservation {
+  id          String            @id @default(uuid())
+  inventoryId String
+  orderId     String?
+  quantity    Int
+  status      ReservationStatus @default(ACTIVE)
+  createdAt   DateTime          @default(now())
+  releasedAt  DateTime?
+
+  inventory Inventory @relation(fields: [inventoryId], references: [id])
+  order     Order?     @relation(fields: [orderId], references: [id])
+
+  @@map("inventory_reservations")
+}
+
+model Supplier {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  contact   String?
+  email     String?
+  phone     String?
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  supplierProducts SupplierProduct[]
+
+  @@map("suppliers")
+}
+
+model SupplierProduct {
+  id           String   @id @default(uuid())
+  supplierId   String
+  productId    String
+  leadTimeDays Int      @default(7)
+  unitCost     Float    @default(0.0)
+  status       String   @default("ACTIVE")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+
+  @@unique([supplierId, productId])
+  @@map("supplier_products")
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  orderNumber String      @unique
+  warehouseId String
+  status      OrderStatus @default(CREATED)
+  totalAmount Float       @default(0.0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  warehouse    Warehouse              @relation(fields: [warehouseId], references: [id])
+  items        OrderItem[]
+  reservations InventoryReservation[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  unitPrice Float    @default(0.0)
+  createdAt DateTime @default(now())
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model AuditRecord {
+  id            String   @id @default(uuid())
+  actorId       String?
+  action        String
+  entityType    String
+  entityId      String
+  previousState String?
+  newState      String?
+  createdAt     DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@map("audit_records")
+}
+
+model Forecast {
+  id              String   @id @default(uuid())
+  productId       String
+  warehouseId     String?
+  forecastPeriod  String
+  predictedDemand Float
+  confidenceLower Float?
+  confidenceUpper Float?
+  generatedAt     DateTime @default(now())
+
+  product   Product    @relation(fields: [productId], references: [id])
+  warehouse Warehouse? @relation(fields: [warehouseId], references: [id])
+
+  @@map("forecasts")
+}
+
+model Anomaly {
+  id          String          @id @default(uuid())
+  entityType  String
+  entityId    String
+  anomalyType String
+  severity    AnomalySeverity @default(MEDIUM)
+  score       Float
+  status      AnomalyStatus   @default(DETECTED)
+  evidence    String?
+  createdAt   DateTime        @default(now())
+
+  @@map("anomalies")
+}
+
+model Risk {
+  id         String       @id @default(uuid())
+  entityType String
+  entityId   String
+  riskType   String
+  severity   RiskSeverity @default(MEDIUM)
+  score      Float
+  factors    String?
+  createdAt  DateTime     @default(now())
+
+  @@map("risks")
+}
+
+model Recommendation {
+  id                 String               @id @default(uuid())
+  recommendationType String
+  targetType         String
+  targetId           String
+  action             String
+  reasoning          String
+  evidence           String?
+  status             RecommendationStatus @default(GENERATED)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  @@map("recommendations")
+}
+
+model Scenario {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  assumptions String
+  results     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("scenarios")
+}
