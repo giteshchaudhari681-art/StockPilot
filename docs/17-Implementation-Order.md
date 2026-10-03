@@ -1,59 +1,61 @@
 StockPilot — Implementation Order
+
 1. Purpose
-This document defines the mandatory implementation sequence for StockPilot.
-The purpose is to prevent:
+   This document defines the mandatory implementation sequence for StockPilot.
+   The purpose is to prevent:
+
 - building features before their dependencies exist
 - creating unnecessary infrastructure too early
 - coupling frontend work to unfinished backend contracts
 - implementing AI/ML before reliable inventory data exists
 - creating tests only after the system is already difficult to debug
 - making architectural changes during feature implementation without documenting them
-StockPilot must be implemented incrementally from foundation → core inventory → operational workflows → intelligence → user experience → validation → deployment.
-The implementation order is not merely a checklist. It defines the dependency graph of the system.
-2. Core Implementation Principle
-StockPilot must be built in this order:
-Foundation
-    ↓
-Database
-    ↓
-Backend Core
-    ↓
-Authentication
-    ↓
-Core Inventory Domain
-    ↓
-Products / Warehouses / Suppliers
-    ↓
-Orders
-    ↓
-Dashboard
-    ↓
-Data Pipeline
-    ↓
-Forecasting
-    ↓
-Anomaly Detection
-    ↓
-Risk Analysis
-    ↓
-Recommendations
-    ↓
-Simulations
-    ↓
-Frontend Refinement
-    ↓
-Integration Testing
-    ↓
-Security Testing
-    ↓
-Performance Testing
-    ↓
-Deployment
-The critical rule is:
-Do not build intelligence on top of unreliable operational data.
+  StockPilot must be implemented incrementally from foundation → core inventory → operational workflows → intelligence → user experience → validation → deployment.
+  The implementation order is not merely a checklist. It defines the dependency graph of the system.
 
-Forecasting, anomaly detection, risk analysis, and recommendations are only useful when the underlying inventory, order, supplier, and warehouse data is trustworthy.
-3. Phase 0 — Repository Foundation
+2. Core Implementation Principle
+   StockPilot must be built in this order:
+   Foundation
+   ↓
+   Database
+   ↓
+   Backend Core
+   ↓
+   Authentication
+   ↓
+   Core Inventory Domain
+   ↓
+   Products / Warehouses / Suppliers
+   ↓
+   Orders
+   ↓
+   Dashboard
+   ↓
+   Data Pipeline
+   ↓
+   Forecasting
+   ↓
+   Anomaly Detection
+   ↓
+   Risk Analysis
+   ↓
+   Recommendations
+   ↓
+   Simulations
+   ↓
+   Frontend Refinement
+   ↓
+   Integration Testing
+   ↓
+   Security Testing
+   ↓
+   Performance Testing
+   ↓
+   Deployment
+   The critical rule is:
+   Do not build intelligence on top of unreliable operational data.
+
+Forecasting, anomaly detection, risk analysis, and recommendations are only useful when the underlying inventory, order, supplier, and warehouse data is trustworthy. 3. Phase 0 — Repository Foundation
 Objective
 Create the initial repository structure and development environment.
 Implement
@@ -80,6 +82,7 @@ infrastructure/
 docs/
 tools/
 Deliverables
+
 - repository initialized
 - project documentation available
 - environment-variable conventions established
@@ -88,76 +91,80 @@ Deliverables
 - ML service initialized
 - Prisma initialized
 - shared contracts initialized
-Exit Criteria
+  Exit Criteria
 - repository installs successfully
 - frontend starts successfully
 - backend starts successfully
 - ML service starts successfully
 - no application feature has been implemented yet
+
 4. Phase 1 — Database Foundation
-Objective
-Establish the persistent data model before implementing business logic.
-Implement
-prisma/
-├── schema.prisma
-└── migrations/
-Create the initial domain model for:
-Users
-Products
-Warehouses
-Inventory
-Inventory Movements
-Inventory Transfers
-Inventory Reservations
-Suppliers
-Orders
-Order Items
-Tasks
+   Objective
+   Establish the persistent data model before implementing business logic.
+   Implement
+   prisma/
+   ├── schema.prisma
+   └── migrations/
+   Create the initial domain model for:
+   Users
+   Products
+   Warehouses
+   Inventory
+   Inventory Movements
+   Inventory Transfers
+   Inventory Reservations
+   Suppliers
+   Orders
+   Order Items
+   Tasks
 1. Define Prisma models.
-2. Define primary keys.
-3. Define foreign-key relationships.
-4. Define required constraints.
-5. Define indexes required by common queries.
-6. Define timestamps.
-7. Define status fields.
-8. Define ownership relationships.
-9. Generate the initial migration.
-10. Validate migration against a clean database.
-Exit Criteria
+1. Define primary keys.
+1. Define foreign-key relationships.
+1. Define required constraints.
+1. Define indexes required by common queries.
+1. Define timestamps.
+1. Define status fields.
+1. Define ownership relationships.
+1. Generate the initial migration.
+1. Validate migration against a clean database.
+   Exit Criteria
+
 - Prisma schema validates.
 - Migration applies successfully.
 - Database can be initialized from zero.
 - Seed data can be inserted.
 - Relationships behave correctly.
+
 5. Phase 2 — Backend Foundation
-Objective
-Build the backend infrastructure required by every domain module.
-Implement
-backend/src/
-├── server.ts
-├── app.ts
-├── config/
-├── common/
-├── middleware/
-└── routes/
-Implement First
-config/
-├── env.ts
-├── database.ts
-├── redis.ts
-└── application.ts
-Then:
-common/
-├── errors/
-├── middleware/
-├── types/
-└── utils/
-Then:
-middleware/
-├── auth.middleware.ts
-├── role.middleware.ts
-└── rate-limit.middleware.ts
-Exit Criteria
+   Objective
+   Build the backend infrastructure required by every domain module.
+   Implement
+   backend/src/
+   ├── server.ts
+   ├── app.ts
+   ├── config/
+   ├── common/
+   ├── middleware/
+   └── routes/
+   Implement First
+   config/
+   ├── env.ts
+   ├── database.ts
+   ├── redis.ts
+   └── application.ts
+   Then:
+   common/
+   ├── errors/
+   ├── middleware/
+   ├── types/
+   └── utils/
+   Then:
+   middleware/
+   ├── auth.middleware.ts
+   ├── role.middleware.ts
+   └── rate-limit.middleware.ts
+   Exit Criteria
+
 - Express application starts.
 - Database connection works.
 - Redis connection works.
@@ -165,19 +172,21 @@ Exit Criteria
 - Request IDs are supported.
 - Validation middleware works.
 - Basic health endpoint works.
+
 6. Phase 3 — Authentication and Authorization
-Objective
-Establish the security boundary before exposing business functionality.
-Implement
-backend/src/auth/
-├── auth.controller.ts
-├── auth.service.ts
-├── auth.repository.ts
-├── auth.schema.ts
-├── auth.types.ts
-├── password.service.ts
-└── token.service.ts
-Implement
+   Objective
+   Establish the security boundary before exposing business functionality.
+   Implement
+   backend/src/auth/
+   ├── auth.controller.ts
+   ├── auth.service.ts
+   ├── auth.repository.ts
+   ├── auth.schema.ts
+   ├── auth.types.ts
+   ├── password.service.ts
+   └── token.service.ts
+   Implement
+
 - user registration if required
 - login
 - password handling
@@ -187,45 +196,47 @@ Implement
 - protected routes
 - role authorization
 - ownership checks
-Frontend
-Implement:
-frontend/src/features/authentication/
-├── components/
-├── hooks/
-├── services/
-├── schemas/
-└── types/
-Exit Criteria
-A user can:
-Login
+  Frontend
+  Implement:
+  frontend/src/features/authentication/
+  ├── components/
+  ├── hooks/
+  ├── services/
+  ├── schemas/
+  └── types/
+  Exit Criteria
+  A user can:
+  Login
   ↓
-Receive authenticated session
+  Receive authenticated session
   ↓
-Access protected application
+  Access protected application
   ↓
-Access only permitted resources
+  Access only permitted resources
   ↓
-Logout
-Unauthorized users must not be able to access protected resources.
+  Logout
+  Unauthorized users must not be able to access protected resources.
+
 7. Phase 4 — Products
-Objective
-Build the product catalog because inventory cannot exist without products.
-Backend
-backend/src/products/
-├── product.controller.ts
-├── product.service.ts
-├── product.repository.ts
-├── product.schema.ts
-├── product.types.ts
-└── product.mapper.ts
-Frontend
-frontend/src/features/products/
-├── components/
-├── hooks/
-├── services/
-├── schemas/
-└── types/
-Implement
+   Objective
+   Build the product catalog because inventory cannot exist without products.
+   Backend
+   backend/src/products/
+   ├── product.controller.ts
+   ├── product.service.ts
+   ├── product.repository.ts
+   ├── product.schema.ts
+   ├── product.types.ts
+   └── product.mapper.ts
+   Frontend
+   frontend/src/features/products/
+   ├── components/
+   ├── hooks/
+   ├── services/
+   ├── schemas/
+   └── types/
+   Implement
+
 - create product
 - update product
 - retrieve product
@@ -234,117 +245,125 @@ Implement
 - filtering
 - validation
 - product status
-Exit Criteria
-Product lifecycle works end-to-end.
+  Exit Criteria
+  Product lifecycle works end-to-end.
+
 8. Phase 5 — Warehouses
-Objective
-Establish physical inventory locations.
-Implement
-backend/src/warehouses/
-and:
-frontend/src/features/warehouses/
-Implement
+   Objective
+   Establish physical inventory locations.
+   Implement
+   backend/src/warehouses/
+   and:
+   frontend/src/features/warehouses/
+   Implement
+
 - create warehouse
 - update warehouse
 - retrieve warehouse
 - warehouse capacity
 - warehouse inventory association
 - warehouse filtering
-Exit Criteria
-Products can be associated with warehouses.
+  Exit Criteria
+  Products can be associated with warehouses.
+
 9. Phase 6 — Inventory Core
-Objective
-Build the central operational domain of StockPilot.
-This is one of the most important phases.
-Implement
-backend/src/inventory/
-├── inventory.controller.ts
-├── inventory.service.ts
-├── inventory.repository.ts
-├── inventory.schema.ts
-├── inventory.types.ts
-├── inventory.mapper.ts
-│
-├── movements/
-├── transfers/
-└── reservations/
-Inventory Operations
-Implement:
-Stock creation
-Stock update
-Stock adjustment
-Stock movement
-Stock transfer
-Stock reservation
-Stock release
-Inventory history
-Critical Rules
-Inventory updates must be:
+   Objective
+   Build the central operational domain of StockPilot.
+   This is one of the most important phases.
+   Implement
+   backend/src/inventory/
+   ├── inventory.controller.ts
+   ├── inventory.service.ts
+   ├── inventory.repository.ts
+   ├── inventory.schema.ts
+   ├── inventory.types.ts
+   ├── inventory.mapper.ts
+   │
+   ├── movements/
+   ├── transfers/
+   └── reservations/
+   Inventory Operations
+   Implement:
+   Stock creation
+   Stock update
+   Stock adjustment
+   Stock movement
+   Stock transfer
+   Stock reservation
+   Stock release
+   Inventory history
+   Critical Rules
+   Inventory updates must be:
+
 - validated
 - atomic where required
 - ownership-aware
 - auditable
 - consistent with inventory movements
-Exit Criteria
-The system can accurately answer:
-What product?
-How many units?
-Which warehouse?
-Available stock?
-Reserved stock?
-Incoming stock?
-Outgoing stock?
-What changed?
-When did it change?
-Why did it change?
+  Exit Criteria
+  The system can accurately answer:
+  What product?
+  How many units?
+  Which warehouse?
+  Available stock?
+  Reserved stock?
+  Incoming stock?
+  Outgoing stock?
+  What changed?
+  When did it change?
+  Why did it change?
+
 10. Phase 7 — Inventory Movement and Transfer System
-Objective
-Implement operational movement of inventory between locations.
-Implement
-inventory/movements/
-inventory/transfers/
-inventory/reservations/
-Workflow
-Request
-  ↓
-Validation
-  ↓
-Authorization
-  ↓
-Inventory availability check
-  ↓
-Transaction
-  ↓
-Inventory update
-  ↓
-Movement record
-  ↓
-Event
-  ↓
-Notification / downstream processing
-Exit Criteria
-Concurrent inventory operations do not produce invalid stock levels.
+    Objective
+    Implement operational movement of inventory between locations.
+    Implement
+    inventory/movements/
+    inventory/transfers/
+    inventory/reservations/
+    Workflow
+    Request
+    ↓
+    Validation
+    ↓
+    Authorization
+    ↓
+    Inventory availability check
+    ↓
+    Transaction
+    ↓
+    Inventory update
+    ↓
+    Movement record
+    ↓
+    Event
+    ↓
+    Notification / downstream processing
+    Exit Criteria
+    Concurrent inventory operations do not produce invalid stock levels.
 11. Phase 8 — Suppliers
-Objective
-Establish supplier information required for procurement and risk analysis.
-Implement
-backend/src/suppliers/
-frontend/src/features/suppliers/
-Implement
+    Objective
+    Establish supplier information required for procurement and risk analysis.
+    Implement
+    backend/src/suppliers/
+    frontend/src/features/suppliers/
+    Implement
+
 - supplier CRUD
 - supplier metadata
 - supplier performance information
 - supplier inventory relationships
 - supplier risk data
-Exit Criteria
-Supplier information can be consumed by order management and intelligence systems.
+  Exit Criteria
+  Supplier information can be consumed by order management and intelligence systems.
+
 12. Phase 9 — Orders
-Objective
-Implement operational ordering workflows.
-Implement
-backend/src/orders/
-frontend/src/features/orders/
-Implement
+    Objective
+    Implement operational ordering workflows.
+    Implement
+    backend/src/orders/
+    frontend/src/features/orders/
+    Implement
+
 - create order
 - update order
 - order items
@@ -352,231 +371,238 @@ Implement
 - fulfillment
 - cancellation
 - order history
-Core Flow
-Create Order
-    ↓
-Validate Items
-    ↓
-Validate Supplier
-    ↓
-Create Order
-    ↓
-Update Relevant Inventory State
-    ↓
-Track Order Status
-Exit Criteria
-Orders can be created and tracked end-to-end.
+  Core Flow
+  Create Order
+  ↓
+  Validate Items
+  ↓
+  Validate Supplier
+  ↓
+  Create Order
+  ↓
+  Update Relevant Inventory State
+  ↓
+  Track Order Status
+  Exit Criteria
+  Orders can be created and tracked end-to-end.
+
 13. Phase 10 — Dashboard
-Objective
-Create the operational command center.
-Backend
-backend/src/dashboard/
-Frontend
-frontend/src/features/dashboard/
-Implement
-DashboardHeader.tsx
-InventoryOverview.tsx
-StockoutOverview.tsx
-OverstockOverview.tsx
-RiskOverview.tsx
-ForecastOverview.tsx
-RecommendationOverview.tsx
-Dashboard Must Display
+    Objective
+    Create the operational command center.
+    Backend
+    backend/src/dashboard/
+    Frontend
+    frontend/src/features/dashboard/
+    Implement
+    DashboardHeader.tsx
+    InventoryOverview.tsx
+    StockoutOverview.tsx
+    OverstockOverview.tsx
+    RiskOverview.tsx
+    ForecastOverview.tsx
+    RecommendationOverview.tsx
+    Dashboard Must Display
+
 - inventory overview
 - stockout risks
 - overstock risks
 - forecast information
 - risk information
 - recommendations
-Important Rule
-The dashboard should consume existing domain APIs.
-Do not duplicate inventory business logic inside dashboard components.
+  Important Rule
+  The dashboard should consume existing domain APIs.
+  Do not duplicate inventory business logic inside dashboard components.
+
 14. Phase 11 — Frontend Operational Experience
-Objective
-Build the complete user-facing operational workflows.
-Implement
-Products
-Warehouses
-Inventory
-Suppliers
-Orders
-Dashboard
-Implement Shared Components
-components/ui/
-components/layout/
-components/forms/
-components/tables/
-components/charts/
-components/feedback/
-Exit Criteria
-A user can operate StockPilot without interacting directly with APIs.
+    Objective
+    Build the complete user-facing operational workflows.
+    Implement
+    Products
+    Warehouses
+    Inventory
+    Suppliers
+    Orders
+    Dashboard
+    Implement Shared Components
+    components/ui/
+    components/layout/
+    components/forms/
+    components/tables/
+    components/charts/
+    components/feedback/
+    Exit Criteria
+    A user can operate StockPilot without interacting directly with APIs.
 15. Phase 12 — Background Processing
-Objective
-Move expensive or asynchronous workloads away from synchronous API requests.
-Implement
-workers/
-├── queues/
-├── processors/
-└── services/
-Initial Queues
-Inventory
-Forecasting
-Recommendations
-Notifications
-Rule
-Do not put long-running forecasting or recommendation calculations directly inside ordinary API request handlers.
+    Objective
+    Move expensive or asynchronous workloads away from synchronous API requests.
+    Implement
+    workers/
+    ├── queues/
+    ├── processors/
+    └── services/
+    Initial Queues
+    Inventory
+    Forecasting
+    Recommendations
+    Notifications
+    Rule
+    Do not put long-running forecasting or recommendation calculations directly inside ordinary API request handlers.
 16. Phase 13 — ML Service Foundation
-Objective
-Create the Python intelligence service after reliable operational data exists.
-Implement
-ml-service/
-├── app/
-│   ├── main.py
-│   ├── config.py
-│   ├── dependencies.py
-│   ├── api/
-│   └── common/
-└── tests/
-Initial API
-GET  /health
-POST /forecasting
-POST /anomaly
-POST /risk
-POST /recommendation
-POST /simulation
-Exit Criteria
+    Objective
+    Create the Python intelligence service after reliable operational data exists.
+    Implement
+    ml-service/
+    ├── app/
+    │ ├── main.py
+    │ ├── config.py
+    │ ├── dependencies.py
+    │ ├── api/
+    │ └── common/
+    └── tests/
+    Initial API
+    GET /health
+    POST /forecasting
+    POST /anomaly
+    POST /risk
+    POST /recommendation
+    POST /simulation
+    Exit Criteria
+
 - ML service starts.
 - FastAPI routes work.
 - Request schemas validate.
 - Response schemas validate.
 - Backend can communicate with ML service.
+
 17. Phase 14 — Forecasting
-Objective
-Implement demand forecasting.
-Implementation Order
-Data
-  ↓
-Cleaning
-  ↓
-Validation
-  ↓
-Preprocessing
-  ↓
-Feature Engineering
-  ↓
-Baseline Model
-  ↓
-Statistical Model
-  ↓
-Machine Learning Model
-  ↓
-Evaluation
-  ↓
-Inference
-  ↓
-Confidence
-Files
-forecasting/
-├── data/
-├── preprocessing/
-├── features/
-├── models/
-├── inference/
-├── evaluation/
-└── configuration/
-Important Rule
-A complex model must not be introduced before a baseline exists.
-The system must be able to answer:
-Is the ML model actually better than a simpler approach?
+    Objective
+    Implement demand forecasting.
+    Implementation Order
+    Data
+    ↓
+    Cleaning
+    ↓
+    Validation
+    ↓
+    Preprocessing
+    ↓
+    Feature Engineering
+    ↓
+    Baseline Model
+    ↓
+    Statistical Model
+    ↓
+    Machine Learning Model
+    ↓
+    Evaluation
+    ↓
+    Inference
+    ↓
+    Confidence
+    Files
+    forecasting/
+    ├── data/
+    ├── preprocessing/
+    ├── features/
+    ├── models/
+    ├── inference/
+    ├── evaluation/
+    └── configuration/
+    Important Rule
+    A complex model must not be introduced before a baseline exists.
+    The system must be able to answer:
+    Is the ML model actually better than a simpler approach?
 
 18. Phase 15 — Anomaly Detection
-Objective
-Identify abnormal inventory and demand behavior.
-Implementation Order
-Data
-  ↓
-Cleaning
-  ↓
-Features
-  ↓
-Detection Model
-  ↓
-Anomaly Score
-  ↓
-Severity
-  ↓
-Evidence
-Implement
-anomaly_detection/
-├── data/
-├── preprocessing/
-├── features/
-├── models/
-├── inference/
-└── evaluation/
-Exit Criteria
-Each anomaly should contain enough information to explain:
-What happened?
-How unusual is it?
-Why was it detected?
-How severe is it?
+    Objective
+    Identify abnormal inventory and demand behavior.
+    Implementation Order
+    Data
+    ↓
+    Cleaning
+    ↓
+    Features
+    ↓
+    Detection Model
+    ↓
+    Anomaly Score
+    ↓
+    Severity
+    ↓
+    Evidence
+    Implement
+    anomaly_detection/
+    ├── data/
+    ├── preprocessing/
+    ├── features/
+    ├── models/
+    ├── inference/
+    └── evaluation/
+    Exit Criteria
+    Each anomaly should contain enough information to explain:
+    What happened?
+    How unusual is it?
+    Why was it detected?
+    How severe is it?
 19. Phase 16 — Supplier Risk
-Objective
-Estimate supplier-related operational risk.
-Implement
-supplier_risk/
-├── data/
-├── preprocessing/
-├── features/
-├── models/
-├── inference/
-└── evaluation/
-Inputs May Include
+    Objective
+    Estimate supplier-related operational risk.
+    Implement
+    supplier_risk/
+    ├── data/
+    ├── preprocessing/
+    ├── features/
+    ├── models/
+    ├── inference/
+    └── evaluation/
+    Inputs May Include
+
 - supplier performance
 - delivery behavior
 - quality behavior
 - historical operational data
-Exit Criteria
-Risk scores are reproducible and explainable.
+  Exit Criteria
+  Risk scores are reproducible and explainable.
+
 20. Phase 17 — Recommendation Engine
-Objective
-Turn intelligence into actionable operational recommendations.
-Implementation Order
-Inventory Data
-      ↓
-Forecasts
-      ↓
-Anomalies
-      ↓
-Supplier Risk
-      ↓
-Signals
-      ↓
-Rules
-      ↓
-Ranking
-      ↓
-Recommendation
-      ↓
-Validation
-Implement
-recommendations/
-├── signals/
-├── rules/
-├── ranking/
-├── generation/
-└── validation/
-Examples
-Potential Stockout
-        ↓
-Recommend Reorder
+    Objective
+    Turn intelligence into actionable operational recommendations.
+    Implementation Order
+    Inventory Data
+    ↓
+    Forecasts
+    ↓
+    Anomalies
+    ↓
+    Supplier Risk
+    ↓
+    Signals
+    ↓
+    Rules
+    ↓
+    Ranking
+    ↓
+    Recommendation
+    ↓
+    Validation
+    Implement
+    recommendations/
+    ├── signals/
+    ├── rules/
+    ├── ranking/
+    ├── generation/
+    └── validation/
+    Examples
+    Potential Stockout
+    ↓
+    Recommend Reorder
 
 Excess Inventory
-        ↓
+↓
 Recommend Inventory Reduction
 
 Supplier Risk Increase
-        ↓
+↓
 Recommend Supplier Review
 Critical Rule
 Recommendations must never blindly execute business actions.
@@ -584,8 +610,7 @@ The system should distinguish between:
 Prediction
 Recommendation
 Action
-These are three different concepts.
-21. Phase 18 — Simulation
+These are three different concepts. 21. Phase 18 — Simulation
 Objective
 Allow users to evaluate hypothetical inventory scenarios.
 Implement
@@ -597,117 +622,120 @@ simulation/
 └── validator.py
 Example
 Current Inventory
-       ↓
+↓
 User Changes Assumption
-       ↓
+↓
 Simulation Engine
-       ↓
+↓
 Projected State
-       ↓
+↓
 Result
-       ↓
+↓
 Comparison
 Examples of Scenarios
+
 - demand increase
 - demand decrease
 - supplier delay
 - inventory increase
 - inventory reduction
 - reorder changes
-Exit Criteria
-Simulation does not modify production inventory.
+  Exit Criteria
+  Simulation does not modify production inventory.
+
 22. Phase 19 — AI / Intelligence Presentation
-Objective
-Present intelligence clearly to users.
-Implement
-frontend/src/components/intelligence/
-Components
-InsightCard.tsx
-ForecastCard.tsx
-RiskCard.tsx
-RecommendationCard.tsx
-ConfidenceIndicator.tsx
-EvidencePanel.tsx
-ScenarioResultCard.tsx
-Design Rule
-The UI must communicate:
-Result
-Confidence
-Evidence
-Impact
-Recommended Action
-not merely:
-AI says...
+    Objective
+    Present intelligence clearly to users.
+    Implement
+    frontend/src/components/intelligence/
+    Components
+    InsightCard.tsx
+    ForecastCard.tsx
+    RiskCard.tsx
+    RecommendationCard.tsx
+    ConfidenceIndicator.tsx
+    EvidencePanel.tsx
+    ScenarioResultCard.tsx
+    Design Rule
+    The UI must communicate:
+    Result
+    Confidence
+    Evidence
+    Impact
+    Recommended Action
+    not merely:
+    AI says...
 23. Phase 20 — Real-Time Features
-Objective
-Introduce real-time updates where they materially improve the product.
-Implement
-backend/src/realtime/
-├── socket.ts
-├── socket-auth.ts
-└── inventory-events.ts
-Frontend
-frontend/src/lib/socket-client.ts
-frontend/src/providers/SocketProvider.tsx
-Real-Time Events
-Examples:
-Inventory Updated
-Order Updated
-Risk Updated
-Recommendation Created
-Forecast Updated
-Exit Criteria
-Real-time events are authenticated and scoped correctly.
+    Objective
+    Introduce real-time updates where they materially improve the product.
+    Implement
+    backend/src/realtime/
+    ├── socket.ts
+    ├── socket-auth.ts
+    └── inventory-events.ts
+    Frontend
+    frontend/src/lib/socket-client.ts
+    frontend/src/providers/SocketProvider.tsx
+    Real-Time Events
+    Examples:
+    Inventory Updated
+    Order Updated
+    Risk Updated
+    Recommendation Created
+    Forecast Updated
+    Exit Criteria
+    Real-time events are authenticated and scoped correctly.
 24. Phase 21 — Testing
-Testing must not be postponed until the end.
-Testing occurs continuously, but the complete test suite is finalized after the main functionality exists.
-24.1 Unit Testing
-Test:
-Services
-Repositories
-Validation
-Business Rules
-ML Functions
-Feature Engineering
-Model Logic
-24.2 Integration Testing
-Implement:
-tests/integration/
-├── api/
-├── database/
-├── redis/
-└── ml-service/
-Verify:
-Backend
+    Testing must not be postponed until the end.
+    Testing occurs continuously, but the complete test suite is finalized after the main functionality exists.
+    24.1 Unit Testing
+    Test:
+    Services
+    Repositories
+    Validation
+    Business Rules
+    ML Functions
+    Feature Engineering
+    Model Logic
+    24.2 Integration Testing
+    Implement:
+    tests/integration/
+    ├── api/
+    ├── database/
+    ├── redis/
+    └── ml-service/
+    Verify:
+    Backend
     ↓
-Database
+    Database
     ↓
-Redis
+    Redis
     ↓
-Workers
+    Workers
     ↓
-ML Service
-24.3 E2E Testing
-Implement:
-tests/e2e/
-Test complete workflows:
-Login
-Product Creation
-Warehouse Creation
-Inventory Management
-Order Creation
-Forecasting
-Risk Analysis
-Recommendations
-Simulation
+    ML Service
+    24.3 E2E Testing
+    Implement:
+    tests/e2e/
+    Test complete workflows:
+    Login
+    Product Creation
+    Warehouse Creation
+    Inventory Management
+    Order Creation
+    Forecasting
+    Risk Analysis
+    Recommendations
+    Simulation
 25. Phase 22 — Security Validation
-Implement:
-tests/security/
-├── authentication/
-├── authorization/
-├── ownership/
-└── validation/
-Verify
+    Implement:
+    tests/security/
+    ├── authentication/
+    ├── authorization/
+    ├── ownership/
+    └── validation/
+    Verify
+
 - invalid authentication
 - expired sessions
 - unauthorized endpoints
@@ -716,16 +744,18 @@ Verify
 - malformed requests
 - injection attempts
 - privilege escalation
-Non-Negotiable Rule
-A user must never be able to access another user's or organization's data merely by changing an ID in a request.
+  Non-Negotiable Rule
+  A user must never be able to access another user's or organization's data merely by changing an ID in a request.
+
 26. Phase 23 — Performance Validation
-Implement:
-tests/performance/
-├── api/
-├── database/
-├── inventory/
-└── forecasting/
-Test
+    Implement:
+    tests/performance/
+    ├── api/
+    ├── database/
+    ├── inventory/
+    └── forecasting/
+    Test
+
 - API latency
 - database query performance
 - concurrent inventory operations
@@ -734,51 +764,53 @@ Test
 - forecasting latency
 - batch forecasting
 - dashboard performance
+
 27. Phase 24 — Observability and Operational Validation
-Before deployment, verify that the application provides enough information to diagnose failures.
-Validate:
-Application errors
-Database failures
-Redis failures
-Worker failures
-ML-service failures
-API failures
-Authentication failures
-Every important failure should be diagnosable from logs and error information.
+    Before deployment, verify that the application provides enough information to diagnose failures.
+    Validate:
+    Application errors
+    Database failures
+    Redis failures
+    Worker failures
+    ML-service failures
+    API failures
+    Authentication failures
+    Every important failure should be diagnosable from logs and error information.
 28. Phase 25 — Deployment Preparation
-Prepare:
-infrastructure/
-└── docker/
+    Prepare:
+    infrastructure/
+    └── docker/
     ├── Dockerfile.frontend
     ├── Dockerfile.backend
     ├── Dockerfile.ml-service
     └── docker-compose.yml
-Validate
-Frontend container
-Backend container
-ML-service container
-Database connectivity
-Redis connectivity
-Environment configuration
-Health checks
+    Validate
+    Frontend container
+    Backend container
+    ML-service container
+    Database connectivity
+    Redis connectivity
+    Environment configuration
+    Health checks
 29. Phase 26 — Production Deployment
-Deployment occurs only after:
-Unit Tests
-      ↓
-Integration Tests
-      ↓
-E2E Tests
-      ↓
-Security Tests
-      ↓
-Performance Tests
-      ↓
-Build Validation
-      ↓
-Container Validation
-      ↓
-Deployment
-Production Checklist
+    Deployment occurs only after:
+    Unit Tests
+    ↓
+    Integration Tests
+    ↓
+    E2E Tests
+    ↓
+    Security Tests
+    ↓
+    Performance Tests
+    ↓
+    Build Validation
+    ↓
+    Container Validation
+    ↓
+    Deployment
+    Production Checklist
+
 - environment variables configured
 - database initialized
 - migrations applied
@@ -789,128 +821,117 @@ Production Checklist
 - workers healthy
 - authentication verified
 - critical workflows verified
+
 30. Phase 27 — Post-Deployment Validation
-After deployment, perform real workflow verification.
-Verify
-Login
+    After deployment, perform real workflow verification.
+    Verify
+    Login
     ↓
-Dashboard
+    Dashboard
     ↓
-Create Product
+    Create Product
     ↓
-Create Warehouse
+    Create Warehouse
     ↓
-Manage Inventory
+    Manage Inventory
     ↓
-Create Order
+    Create Order
     ↓
-Generate Forecast
+    Generate Forecast
     ↓
-View Risk
+    View Risk
     ↓
-View Recommendation
+    View Recommendation
     ↓
-Run Simulation
-The system is not considered complete merely because the deployment succeeded.
+    Run Simulation
+    The system is not considered complete merely because the deployment succeeded.
 31. Recommended Development Sequence
-The practical implementation sequence is:
-01. Repository Foundation
-        ↓
-02. Database Schema
-        ↓
-03. Backend Foundation
-        ↓
-04. Authentication
-        ↓
-05. Products
-        ↓
-06. Warehouses
-        ↓
-07. Inventory
-        ↓
-08. Movements / Transfers / Reservations
-        ↓
-09. Suppliers
-        ↓
-10. Orders
-        ↓
-11. Dashboard
-        ↓
-12. Frontend Operational UI
-        ↓
-13. Background Workers
-        ↓
-14. ML Service Foundation
-        ↓
-15. Forecasting
-        ↓
-16. Anomaly Detection
-        ↓
-17. Supplier Risk
-        ↓
-18. Recommendations
-        ↓
-19. Simulations
-        ↓
-20. Intelligence UI
-        ↓
-21. Real-Time Features
-        ↓
-22. Integration Testing
-        ↓
-23. E2E Testing
-        ↓
-24. Security Testing
-        ↓
-25. Performance Testing
-        ↓
-26. Deployment Preparation
-        ↓
-27. Deployment
-        ↓
-28. Post-Deployment Validation
-32. What Must NOT Be Done Early
-The following must not be implemented before their dependencies exist.
-Do Not Build Forecasting Before
-Products
-+
-Inventory History
-+
-Orders
-+
+    The practical implementation sequence is:
+32. Repository Foundation
+    ↓
+33. Database Schema
+    ↓
+34. Backend Foundation
+    ↓
+35. Authentication
+    ↓
+36. Products
+    ↓
+37. Warehouses
+    ↓
+38. Inventory
+    ↓
+39. Movements / Transfers / Reservations
+    ↓
+40. Suppliers
+    ↓
+41. Orders
+    ↓
+42. Dashboard
+    ↓
+43. Frontend Operational UI
+    ↓
+44. Background Workers
+    ↓
+45. ML Service Foundation
+    ↓
+46. Forecasting
+    ↓
+47. Anomaly Detection
+    ↓
+48. Supplier Risk
+    ↓
+49. Recommendations
+    ↓
+50. Simulations
+    ↓
+51. Intelligence UI
+    ↓
+52. Real-Time Features
+    ↓
+53. Integration Testing
+    ↓
+54. E2E Testing
+    ↓
+55. Security Testing
+    ↓
+56. Performance Testing
+    ↓
+57. Deployment Preparation
+    ↓
+58. Deployment
+    ↓
+59. Post-Deployment Validation
+60. What Must NOT Be Done Early
+    The following must not be implemented before their dependencies exist.
+    Do Not Build Forecasting Before
+    Products
+
+-
+
+Inventory History +
+Orders +
 Reliable Historical Data
 Do Not Build Recommendations Before
-Inventory
-+
-Forecasting
-+
-Risk Signals
-+
+Inventory +
+Forecasting +
+Risk Signals +
 Business Rules
 Do Not Build Simulations Before
-Reliable Domain State
-+
-Inventory Rules
-+
+Reliable Domain State +
+Inventory Rules +
 Forecasting
 Do Not Optimize Before
-Correctness
-+
+Correctness +
 Measurement
 Do Not Add Complex Infrastructure Before
-There is an actual workload requiring it.
-33. Definition of Done
+There is an actual workload requiring it. 33. Definition of Done
 A phase is complete only when all of the following are true:
-Implementation
-    +
-Validation
-    +
-Tests
-    +
-Documentation
-    +
-Error Handling
-    +
+Implementation +
+Validation +
+Tests +
+Documentation +
+Error Handling +
 Security
 A feature is not done simply because its UI appears on the screen.
 For example:
@@ -918,26 +939,26 @@ Forecasting UI exists
 does not mean forecasting is complete.
 The complete feature requires:
 Data
- ↓
+↓
 Preprocessing
- ↓
+↓
 Features
- ↓
+↓
 Model
- ↓
+↓
 Evaluation
- ↓
+↓
 Inference
- ↓
+↓
 Backend API
- ↓
+↓
 Frontend
- ↓
+↓
 Validation
- ↓
-Tests
-34. Architectural Discipline
+↓
+Tests 34. Architectural Discipline
 During implementation:
+
 1. Follow the existing architecture.
 2. Do not introduce a new technology merely because it appears convenient.
 3. Do not duplicate business logic between frontend and backend.
@@ -948,45 +969,44 @@ During implementation:
 8. Do not create infrastructure without a concrete requirement.
 9. Do not weaken security to make development easier.
 10. Do not mark a feature complete without tests.
-35. Change Management
-If implementation reveals that the architecture is insufficient:
-Problem Identified
-        ↓
-Investigate
-        ↓
-Determine Root Cause
-        ↓
-Propose Change
-        ↓
-Document Decision
-        ↓
-Update Architecture
-        ↓
-Implement Change
-        ↓
-Test
-Architectural changes must be recorded in:
-docs/15-Architecture-Decisions.md
-Major changes requiring broader technical discussion should be recorded in:
-docs/16-RFC.md
-36. Final Implementation Rule
-StockPilot should be built as a sequence of working vertical slices, not as disconnected piles of files.
-The preferred pattern is:
-Database
+11. Change Management
+    If implementation reveals that the architecture is insufficient:
+    Problem Identified
     ↓
-Backend
+    Investigate
     ↓
-API
+    Determine Root Cause
     ↓
-Frontend
+    Propose Change
     ↓
-Test
+    Document Decision
     ↓
-Working Feature
-Then move to the next feature.
-The goal is not to create the entire architecture first.
-The goal is to progressively create a correct, testable, observable, and production-capable system while keeping every layer synchronized with the others.
-
+    Update Architecture
+    ↓
+    Implement Change
+    ↓
+    Test
+    Architectural changes must be recorded in:
+    docs/15-Architecture-Decisions.md
+    Major changes requiring broader technical discussion should be recorded in:
+    docs/16-RFC.md
+12. Final Implementation Rule
+    StockPilot should be built as a sequence of working vertical slices, not as disconnected piles of files.
+    The preferred pattern is:
+    Database
+    ↓
+    Backend
+    ↓
+    API
+    ↓
+    Frontend
+    ↓
+    Test
+    ↓
+    Working Feature
+    Then move to the next feature.
+    The goal is not to create the entire architecture first.
+    The goal is to progressively create a correct, testable, observable, and production-capable system while keeping every layer synchronized with the others.
 
 # StockPilot — Implementation Order
 
@@ -1153,8 +1173,8 @@ Database → Backend foundation → Backend domains → Frontend foundation → 
 97. backend/src/orders/order.mapper.ts
 98. backend/src/orders/order.repository.ts
 99. backend/src/orders/order.service.ts
-100. backend/src/orders/order.controller.ts
-101. backend/src/routes/order.routes.ts
+100.  backend/src/orders/order.controller.ts
+101.  backend/src/routes/order.routes.ts
 
 ---
 

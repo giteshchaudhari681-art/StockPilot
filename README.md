@@ -55,6 +55,7 @@ To develop StockPilot locally, you must have the following installed:
 ## Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/giteshchaudhari681-art/StockPilot.git
    cd StockPilot
@@ -64,7 +65,7 @@ To develop StockPilot locally, you must have the following installed:
    ```bash
    npm install
    ```
-   *(Note: This installs workspace dependencies across the monorepo.)*
+   _(Note: This installs workspace dependencies across the monorepo.)_
 
 ---
 
@@ -75,6 +76,7 @@ StockPilot uses environment variables for configuration.
 **NEVER commit real credentials to the repository.**
 
 1. Copy the example template:
+
    ```bash
    cp .env.example .env
    ```
@@ -99,6 +101,7 @@ For engineering conventions, see:
 **PR 01 — Repository & Engineering Foundation**
 
 The repository foundation has been established:
+
 - Monorepo structure (`apps/`, `packages/`)
 - Root workspace and TypeScript configurations
 - Git configuration (`.gitignore`, `.gitattributes`)
@@ -107,4 +110,4 @@ The repository foundation has been established:
 - Development Docker infrastructure (`docker-compose.yml`)
 - Foundation documentation
 
-*Note: Application functionality (Express, React, business logic) is intentionally absent in PR 01 and will be introduced in subsequent PRs.*
+_Note: Application functionality (Express, React, business logic) is intentionally absent in PR 01 and will be introduced in subsequent PRs._

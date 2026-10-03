@@ -61,6 +61,7 @@ StockPilot/
 ### `apps/api/`
 
 **Owns:**
+
 - Express application bootstrap
 - REST API route handlers
 - Authentication and authorization logic
@@ -69,6 +70,7 @@ StockPilot/
 - Background job definitions (BullMQ)
 
 **Must not own:**
+
 - UI components
 - Frontend state
 - Direct database schema definitions (that's `prisma/`)
@@ -81,6 +83,7 @@ StockPilot/
 ### `apps/web/`
 
 **Owns:**
+
 - React/Next.js application
 - UI components and pages
 - Frontend routing
@@ -89,6 +92,7 @@ StockPilot/
 - API client layer
 
 **Must not own:**
+
 - Server-side business logic
 - Database access
 - Shared types used by both api and web (that's `packages/shared/`)
@@ -100,11 +104,13 @@ StockPilot/
 ### `packages/shared/`
 
 **Owns:**
+
 - TypeScript interfaces and types shared across apps
 - Shared constants
 - DTO contracts
 
 **Must not own:**
+
 - Framework-specific code (React, Express)
 - Database models or Prisma types
 - Business logic
@@ -117,10 +123,12 @@ StockPilot/
 ### `packages/validation/`
 
 **Owns:**
+
 - Shared validation schemas (Zod or equivalent)
 - Input/output validation types
 
 **Must not own:**
+
 - Database logic
 - Application routing
 - Framework-specific middleware
@@ -132,11 +140,13 @@ StockPilot/
 ### `packages/config/`
 
 **Owns:**
+
 - Environment variable access and validation
 - Configuration types and schemas
 - Configuration loading logic
 
 **Must not own:**
+
 - Business logic
 - Database models
 - Application code
@@ -148,10 +158,12 @@ StockPilot/
 ### `prisma/`
 
 **Owns:**
+
 - `schema.prisma` — the single source of truth for the database schema
 - `migrations/` — migration history (must not be manually modified)
 
 **Must not own:**
+
 - Application code
 - Business logic
 - Seed data (that's `database/seeds/`)
@@ -163,10 +175,12 @@ StockPilot/
 ### `database/`
 
 **Owns:**
+
 - CLI scripts for database operations: `scripts/validate.ts`, `scripts/reset.ts`, `scripts/backup.ts`
 - Seed data scripts: `seeds/`
 
 **Must not own:**
+
 - Application code
 - Prisma schema definition
 - Migration files
@@ -178,6 +192,7 @@ StockPilot/
 ### `docs/`
 
 **Owns:**
+
 - All project documentation
 - Architecture documents
 - Engineering conventions
@@ -185,6 +200,7 @@ StockPilot/
 - Decision records
 
 **Must not own:**
+
 - Application code
 - Configuration files
 
@@ -193,11 +209,13 @@ StockPilot/
 ### `scripts/`
 
 **Owns:**
+
 - Root-level development workflow scripts
 - Build orchestration
 - Environment setup helpers
 
 **Must not own:**
+
 - Application source code
 - Database schema
 
@@ -206,6 +224,7 @@ StockPilot/
 ### `.github/`
 
 **Owns:**
+
 - GitHub repository configuration
 - PR template
 - GitHub Actions workflows (PR 10+)
@@ -229,6 +248,7 @@ packages/*   ──NO cross-package imports at this stage──
 ```
 
 **Rules:**
+
 - Apps may import from packages. Packages must not import from apps.
 - `apps/api` must not import from `apps/web` and vice versa.
 - No circular dependencies anywhere.
@@ -240,11 +260,11 @@ packages/*   ──NO cross-package imports at this stage──
 
 These directories will be added by later PRs:
 
-| Directory          | Purpose                          | PR  |
-|--------------------|----------------------------------|-----|
-| `apps/api/src/`    | API source code                  | 02  |
-| `apps/web/src/`    | Web source code                  | 03  |
-| `packages/shared/src/` | Shared type definitions      | 04  |
-| `.github/workflows/`| CI pipelines                   | 10  |
+| Directory              | Purpose                 | PR  |
+| ---------------------- | ----------------------- | --- |
+| `apps/api/src/`        | API source code         | 02  |
+| `apps/web/src/`        | Web source code         | 03  |
+| `packages/shared/src/` | Shared type definitions | 04  |
+| `.github/workflows/`   | CI pipelines            | 10  |
 
 Do not create these ahead of their designated PR.

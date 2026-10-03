@@ -140,13 +140,13 @@ Dependencies flow **downward** only. No upward imports. No circular dependencies
 
 ## Infrastructure
 
-| Service    | Technology       | Purpose                  | PR      |
-|------------|------------------|--------------------------|---------|
-| Database   | PostgreSQL 16    | Operational data store   | PR 11   |
-| Cache      | Redis 7          | Caching, queues          | PR 02+  |
-| API        | Express + Node   | REST API                 | PR 02   |
-| Web        | Next.js / React  | Frontend                 | PR 03   |
-| Container  | Docker Compose   | Local dev infrastructure | PR 01   |
+| Service   | Technology      | Purpose                  | PR     |
+| --------- | --------------- | ------------------------ | ------ |
+| Database  | PostgreSQL 16   | Operational data store   | PR 11  |
+| Cache     | Redis 7         | Caching, queues          | PR 02+ |
+| API       | Express + Node  | REST API                 | PR 02  |
+| Web       | Next.js / React | Frontend                 | PR 03  |
+| Container | Docker Compose  | Local dev infrastructure | PR 01  |
 
 ---
 
@@ -157,6 +157,7 @@ StockPilot is built through a controlled **100-PR architecture roadmap**.
 Each PR has a single, bounded responsibility. PRs must not implement functionality belonging to other PRs.
 
 This ensures:
+
 - Every feature is independently reviewable
 - Architecture drift is prevented
 - Each PR can be tested in isolation

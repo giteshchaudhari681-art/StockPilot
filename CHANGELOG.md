@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Project documentation suite (`00-Project-Index.md` through `17-Implementation-Order.md`) defining system requirements, architecture, database schemas, API specifications, and security rules.
 - Open-source licensing specification under the Apache License 2.0 (`LICENSE` and ADR-036 in `docs/15-Architecture-Decisions.md`).
 - Root and workspace configuration files (`.gitignore`, `.editorconfig`, `.env.example`, `.dockerignore`).

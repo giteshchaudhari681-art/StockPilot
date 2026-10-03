@@ -107,6 +107,7 @@ cp ml-service/.env.example ml-service/.env
 ### Step 4: Install Dependencies
 
 #### Backend
+
 ```bash
 cd backend
 npm install
@@ -114,6 +115,7 @@ cd ..
 ```
 
 #### Frontend
+
 ```bash
 cd frontend
 npm install
@@ -121,6 +123,7 @@ cd ..
 ```
 
 #### ML Service
+
 ```bash
 cd ml-service
 python -m venv venv
@@ -153,18 +156,21 @@ cd ..
 For active local development, start each service in a separate terminal window:
 
 ### 1. Backend Service (Port 4000)
+
 ```bash
 cd backend
 npm run dev
 ```
 
 ### 2. Frontend Application (Port 3000)
+
 ```bash
 cd frontend
 npm run dev
 ```
 
 ### 3. ML Service (Port 8000)
+
 ```bash
 cd ml-service
 # Activate virtual environment
@@ -192,6 +198,7 @@ Create descriptive feature or fix branches from the main development branch:
 Ensure all code passes static analysis before committing:
 
 - **Backend:**
+
   ```bash
   cd backend
   npm run lint
@@ -199,6 +206,7 @@ Ensure all code passes static analysis before committing:
   ```
 
 - **Frontend:**
+
   ```bash
   cd frontend
   npm run lint
@@ -218,12 +226,14 @@ Ensure all code passes static analysis before committing:
 Run the relevant automated test suites:
 
 - **Backend Unit & Integration Tests (Jest):**
+
   ```bash
   cd backend
   npm test
   ```
 
 - **Frontend End-to-End Tests (Playwright):**
+
   ```bash
   cd frontend
   npm run test:e2e

@@ -57,8 +57,8 @@
 > If no new dependencies: **None**
 
 | Package | Version | Justification |
-|---------|---------|---------------|
-| | | |
+| ------- | ------- | ------------- |
+|         |         |               |
 
 ---
 

@@ -20,39 +20,39 @@ Conventions are **not optional**. Deviations require explicit architectural deci
 
 ### Files and Directories
 
-| Artifact                  | Convention        | Example                          |
-|---------------------------|-------------------|----------------------------------|
-| TypeScript source files   | `kebab-case`      | `user-service.ts`                |
-| React components          | `PascalCase`      | `InventoryTable.tsx`             |
-| Test files                | `*.test.ts`       | `user-service.test.ts`           |
-| E2E test files            | `*.e2e.ts`        | `login.e2e.ts`                   |
-| Directories               | `kebab-case`      | `inventory-movements/`           |
-| Configuration files       | `kebab-case`      | `database.config.ts`             |
+| Artifact                | Convention   | Example                |
+| ----------------------- | ------------ | ---------------------- |
+| TypeScript source files | `kebab-case` | `user-service.ts`      |
+| React components        | `PascalCase` | `InventoryTable.tsx`   |
+| Test files              | `*.test.ts`  | `user-service.test.ts` |
+| E2E test files          | `*.e2e.ts`   | `login.e2e.ts`         |
+| Directories             | `kebab-case` | `inventory-movements/` |
+| Configuration files     | `kebab-case` | `database.config.ts`   |
 
 ### TypeScript
 
-| Artifact        | Convention           | Example                          |
-|-----------------|----------------------|----------------------------------|
-| Variables       | `camelCase`          | `inventoryCount`                 |
-| Functions       | `camelCase`          | `calculateAvailableQty()`        |
-| Classes         | `PascalCase`         | `InventoryService`               |
-| Interfaces      | `PascalCase`         | `CreateProductDto`               |
-| Types           | `PascalCase`         | `OrderStatus`                    |
-| Enums           | `PascalCase`         | `MovementType`                   |
-| Enum values     | `SCREAMING_SNAKE`    | `TRANSFER_IN`                    |
-| Constants       | `SCREAMING_SNAKE`    | `MAX_RETRY_COUNT`                |
-| Private members | `camelCase`          | `this.prismaClient`              |
-| Generic params  | `T`, `TEntity`, etc. | `<TResult>`                      |
+| Artifact        | Convention           | Example                   |
+| --------------- | -------------------- | ------------------------- |
+| Variables       | `camelCase`          | `inventoryCount`          |
+| Functions       | `camelCase`          | `calculateAvailableQty()` |
+| Classes         | `PascalCase`         | `InventoryService`        |
+| Interfaces      | `PascalCase`         | `CreateProductDto`        |
+| Types           | `PascalCase`         | `OrderStatus`             |
+| Enums           | `PascalCase`         | `MovementType`            |
+| Enum values     | `SCREAMING_SNAKE`    | `TRANSFER_IN`             |
+| Constants       | `SCREAMING_SNAKE`    | `MAX_RETRY_COUNT`         |
+| Private members | `camelCase`          | `this.prismaClient`       |
+| Generic params  | `T`, `TEntity`, etc. | `<TResult>`               |
 
 ### Database (Prisma)
 
-| Artifact        | Convention      | Example               |
-|-----------------|-----------------|-----------------------|
-| Model names     | `PascalCase`    | `InventoryMovement`   |
-| Field names     | `camelCase`     | `productId`           |
-| Table names     | `snake_case`    | `inventory_movements` |
-| Enum names      | `PascalCase`    | `MovementType`        |
-| Enum values     | `SCREAMING_SNAKE` | `TRANSFER_IN`       |
+| Artifact    | Convention        | Example               |
+| ----------- | ----------------- | --------------------- |
+| Model names | `PascalCase`      | `InventoryMovement`   |
+| Field names | `camelCase`       | `productId`           |
+| Table names | `snake_case`      | `inventory_movements` |
+| Enum names  | `PascalCase`      | `MovementType`        |
+| Enum values | `SCREAMING_SNAKE` | `TRANSFER_IN`         |
 
 ---
 
@@ -61,6 +61,7 @@ Conventions are **not optional**. Deviations require explicit architectural deci
 ### Always use strict mode
 
 All TypeScript is compiled with `strict: true`. This enables:
+
 - `noImplicitAny`
 - `strictNullChecks`
 - `strictFunctionTypes`
@@ -102,7 +103,7 @@ interface UserDto {
 }
 
 // Unions and complex types
-type OrderStatus = 'created' | 'confirmed' | 'fulfilled' | 'cancelled';
+type OrderStatus = "created" | "confirmed" | "fulfilled" | "cancelled";
 ```
 
 ### Prefer `const` over `let`
@@ -123,14 +124,14 @@ Organize imports in this order, separated by blank lines:
 4. Local relative imports
 
 ```typescript
-import { createServer } from 'http';                  // 1. Node built-in
+import { createServer } from "http"; // 1. Node built-in
 
-import express from 'express';                        // 2. External
-import { PrismaClient } from '@prisma/client';
+import express from "express"; // 2. External
+import { PrismaClient } from "@prisma/client";
 
-import { UserDto } from '@stockpilot/shared';         // 3. Workspace
+import { UserDto } from "@stockpilot/shared"; // 3. Workspace
 
-import { UserService } from './services/user.service'; // 4. Local
+import { UserService } from "./services/user.service"; // 4. Local
 ```
 
 ### No circular dependencies
@@ -173,6 +174,7 @@ packages/shared  →  apps/api  ❌
 - Never log `DATABASE_URL` or any value containing credentials.
 
 To add a new environment variable:
+
 1. Add it to `.env.example` with a placeholder and a comment.
 2. Update the configuration schema (PR 07+).
 3. Document its purpose.
@@ -190,6 +192,7 @@ chore/pr-XX-short-description
 ```
 
 Examples:
+
 ```
 feat/pr-02-backend-application-bootstrap
 fix/pr-11-schema-migration-correction
@@ -207,6 +210,7 @@ Use conventional commits format:
 ```
 
 Types:
+
 - `feat` — new feature
 - `fix` — bug fix
 - `chore` — maintenance (configuration, tooling, structure)
@@ -216,6 +220,7 @@ Types:
 - `ci` — CI/CD configuration
 
 Example:
+
 ```
 feat: implement user authentication service
 
@@ -246,6 +251,13 @@ Every PR must use the `.github/pull_request_template.md`.
 Before implementing anything, verify it belongs to the current roadmap PR.
 
 If functionality belongs to a later PR, defer it — even if it seems easy or obvious.
+
+### Mandatory PR Validation Checks
+
+Every PR must include or update a GitHub Actions workflow to validate its changes.
+
+- Validation should cover installation, typechecking, linting, formatting, and building as applicable.
+- Workflows should be added in `.github/workflows/` (e.g. `pr-XX-validation.yml`).
 
 ---
 
@@ -282,6 +294,7 @@ Code must be easy to trace from entry point to output.
 Formatting is enforced by Prettier (configured in PR 01+).
 
 Key style rules:
+
 - Single quotes for strings in TypeScript/JavaScript
 - Trailing commas in multi-line structures
 - Semicolons required
