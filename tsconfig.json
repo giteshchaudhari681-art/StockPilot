@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    // Target: modern Node.js LTS (Node 20+)
+    "target": "ES2022",
+    "lib": ["ES2022"],
+
+    // Module strategy: NodeNext for Node.js workspaces
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // Strict type checking — all strictness flags enabled
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
+
+    // Code quality
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Module/import quality
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+
+    // Source maps and declarations (workspace packages will extend as needed)
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // Output: each workspace overrides these
+    "outDir": "./dist",
+
+    // Skip lib checking for third-party types
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/node_modules",
+    "**/dist"
+  ]
+}

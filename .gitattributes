@@ -1,0 +1,78 @@
+# StockPilot — .gitattributes
+# Establishes consistent Git behavior across Windows, Linux, and macOS.
+# Critical for a repository that may be developed on Windows but deployed
+# in Linux containers.
+
+# ─── Default: normalise all text files to LF ──────────────────────────────
+* text=auto eol=lf
+
+# ─── Source code ──────────────────────────────────────────────────────────
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.jsx       text eol=lf
+*.mjs       text eol=lf
+*.cjs       text eol=lf
+
+# ─── Configuration & data formats ─────────────────────────────────────────
+*.json      text eol=lf
+*.yaml      text eol=lf
+*.yml       text eol=lf
+*.toml      text eol=lf
+*.env       text eol=lf
+*.env.*     text eol=lf
+
+# ─── Markup / documentation ───────────────────────────────────────────────
+*.md        text eol=lf
+*.mdx       text eol=lf
+*.html      text eol=lf
+*.css       text eol=lf
+*.scss      text eol=lf
+
+# ─── Prisma ───────────────────────────────────────────────────────────────
+*.prisma    text eol=lf
+
+# ─── Docker ───────────────────────────────────────────────────────────────
+Dockerfile          text eol=lf
+Dockerfile.*        text eol=lf
+docker-compose.yml  text eol=lf
+.dockerignore       text eol=lf
+
+# ─── Shell scripts — must be LF for Linux execution ───────────────────────
+*.sh        text eol=lf
+*.bash      text eol=lf
+
+# ─── SQL ──────────────────────────────────────────────────────────────────
+*.sql       text eol=lf
+
+# ─── Python (ml-service) ──────────────────────────────────────────────────
+*.py        text eol=lf
+*.pyi       text eol=lf
+*.txt       text eol=lf
+*.cfg       text eol=lf
+*.ini       text eol=lf
+
+# ─── Editor / project configuration ──────────────────────────────────────
+.editorconfig   text eol=lf
+.gitignore      text eol=lf
+.gitattributes  text eol=lf
+.nvmrc          text eol=lf
+.prettierrc     text eol=lf
+.eslintrc*      text eol=lf
+tsconfig*.json  text eol=lf
+
+# ─── Binary files — do not mangle ─────────────────────────────────────────
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.svg       text eol=lf
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.eot       binary
+*.pdf       binary
+*.zip       binary
+*.tar.gz    binary
+*.gz        binary

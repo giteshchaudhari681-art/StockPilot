@@ -1,0 +1,23 @@
+{
+  "name": "@stockpilot/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "StockPilot shared types, constants, and contracts — consumed by all apps",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"Lint not yet configured — see PR 04\"",
+    "test": "echo \"Tests not yet configured — see PR 09\""
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

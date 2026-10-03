@@ -1,5 +1,6 @@
 root = true
 
+# ─── All files: universal baseline ────────────────────────────────────────
 [*]
 charset = utf-8
 end_of_line = lf
@@ -8,12 +9,39 @@ indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.py]
-indent_style = space
-indent_size = 4
+# ─── TypeScript / JavaScript ──────────────────────────────────────────────
+[*.{ts,tsx,js,jsx,mjs,cjs}]
+indent_size = 2
 
-[*.md]
+# ─── JSON ─────────────────────────────────────────────────────────────────
+[*.json]
+indent_size = 2
+
+# ─── YAML ─────────────────────────────────────────────────────────────────
+[*.{yaml,yml}]
+indent_size = 2
+
+# ─── Markdown ─────────────────────────────────────────────────────────────
+# Trailing whitespace is meaningful in Markdown (line breaks).
+[*.{md,mdx}]
 trim_trailing_whitespace = false
 
+# ─── Prisma ───────────────────────────────────────────────────────────────
+[*.prisma]
+indent_size = 2
+
+# ─── Python (ml-service) ──────────────────────────────────────────────────
+[*.py]
+indent_size = 4
+
+# ─── Makefile — must use real tabs ────────────────────────────────────────
 [Makefile]
 indent_style = tab
+
+# ─── Shell scripts ────────────────────────────────────────────────────────
+[*.sh]
+indent_size = 2
+
+# ─── SQL ──────────────────────────────────────────────────────────────────
+[*.sql]
+indent_size = 2

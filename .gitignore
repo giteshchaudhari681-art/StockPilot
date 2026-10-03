@@ -1,66 +1,108 @@
-# StockPilot Repository GitIgnore
+# StockPilot — .gitignore
+# Production-quality ignore rules for the StockPilot monorepo.
 
-# Node.js & Package Managers
+# ─── Node.js & Package Managers ───────────────────────────────────────────
 node_modules/
-.pnpm-store/
 .npm/
-
-# Python & ML Service
-venv/
-.venv/
-env/
-ENV/
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.ipynb_checkpoints/
-
-# Frontend & Next.js Build Outputs
-.next/
-out/
-dist/
-build/
-
-# Environment Variables & Secrets
-.env
-.env*.local
-*.env
-!.env.example
-!frontend/.env.example
-!backend/.env.example
-!ml-service/.env.example
-*.pem
-*.key
-
-# Logs & Debugging
-logs/
-*.log
+.pnpm-store/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Testing & Coverage Artifacts
+# ─── Build & Compilation Output ───────────────────────────────────────────
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+
+# ─── TypeScript ───────────────────────────────────────────────────────────
+*.tsbuildinfo
+
+# ─── Environment Variables & Secrets ──────────────────────────────────────
+# NEVER commit real environment files.
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.staging
+.env.*.local
+*.env
+# Keep the example template tracked:
+!.env.example
+!apps/**/.env.example
+!packages/**/.env.example
+
+# ─── Certificates & Keys ──────────────────────────────────────────────────
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ─── Logs ─────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ─── Testing & Coverage ───────────────────────────────────────────────────
 coverage/
 .nyc_output/
 playwright-report/
 test-results/
+.playwright/
 
-# System & OS Files
+# ─── OS Artifacts ─────────────────────────────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-*.tmp
-*.temp
+Desktop.ini
+
+# ─── Editor & IDE ─────────────────────────────────────────────────────────
+.idea/
 *.swp
 *.swo
-
-# IDE & Editor Configuration
-.idea/
+*.tmp
+*.temp
+*~
+# Allow shared VS Code workspace settings if intentionally committed:
 .vscode/*
 !.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# ─── Python (ml-service) ──────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+dist-info/
+
+# ─── Docker ───────────────────────────────────────────────────────────────
+# Local Docker override files with machine-specific config:
+docker-compose.override.yml
+
+# ─── Database ─────────────────────────────────────────────────────────────
+# Local database dumps or backup files:
+*.sql.bak
+*.dump
+
+# ─── Temporary / Scratch ──────────────────────────────────────────────────
+tmp/
+temp/
+scratch/
