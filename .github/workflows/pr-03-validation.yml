@@ -2,13 +2,6 @@ name: PR 03 Frontend Bootstrap Validation
 
 on:
   pull_request:
-    branches:
-      - main
-      - feat/pr-01-repository-foundation
-    paths:
-      - 'apps/web/**'
-      - 'package.json'
-      - 'package-lock.json'
 
 jobs:
   validate-frontend:
