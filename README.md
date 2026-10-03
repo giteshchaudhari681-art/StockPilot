@@ -55,19 +55,16 @@ To develop StockPilot locally, you must have the following installed:
 ## Installation
 
 1. **Clone the repository:**
-
    ```bash
    git clone https://github.com/giteshchaudhari681-art/StockPilot.git
    cd StockPilot
    ```
 
 2. **Install dependencies:**
-
    ```bash
    npm install
    ```
-
-   _(Note: This installs workspace dependencies across the monorepo.)_
+   *(Note: This installs workspace dependencies across the monorepo.)*
 
 3. **Start the backend development server:**
    ```bash
@@ -83,7 +80,6 @@ StockPilot uses environment variables for configuration.
 **NEVER commit real credentials to the repository.**
 
 1. Copy the example template:
-
    ```bash
    cp .env.example .env
    ```
@@ -105,14 +101,13 @@ For engineering conventions, see:
 
 ## Current Status
 
-**PR 02 — Backend Application Bootstrap**
+**PR 03 — Frontend Application Bootstrap**
 
-The backend foundational application has been established:
+The frontend foundational application has been established:
+- React/Vite bootstrap
+- Structural application shell
+- Routing boundary (React Router)
+- Provider boundary
+- Minimal environment configuration
 
-- Node.js/Express bootstrap
-- Safe configuration loading
-- Minimal health endpoint
-- Graceful shutdown lifecycle
-- Generic error boundaries
-
-_(Previous: PR 01 — Repository & Engineering Foundation)_
+*(Previous: PR 02 — Backend Application Bootstrap)*

@@ -1,0 +1,41 @@
+name: PR 03 Frontend Bootstrap Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feat/pr-01-repository-foundation
+    paths:
+      - 'apps/web/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  validate-frontend:
+    name: Validate Frontend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck -w @stockpilot/web
+
+      - name: Lint
+        run: npm run lint -w @stockpilot/web
+
+      - name: Format Check
+        run: npm run format:check -w @stockpilot/web
+
+      - name: Build
+        run: npm run build -w @stockpilot/web
