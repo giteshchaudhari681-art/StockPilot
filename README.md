@@ -62,10 +62,17 @@ To develop StockPilot locally, you must have the following installed:
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
+
    _(Note: This installs workspace dependencies across the monorepo.)_
+
+3. **Start the backend development server:**
+   ```bash
+   npm run dev -w apps/api
+   ```
 
 ---
 
@@ -98,16 +105,14 @@ For engineering conventions, see:
 
 ## Current Status
 
-**PR 01 — Repository & Engineering Foundation**
+**PR 02 — Backend Application Bootstrap**
 
-The repository foundation has been established:
+The backend foundational application has been established:
 
-- Monorepo structure (`apps/`, `packages/`)
-- Root workspace and TypeScript configurations
-- Git configuration (`.gitignore`, `.gitattributes`)
-- Editor configuration (`.editorconfig`)
-- Environment strategy (`.env.example`)
-- Development Docker infrastructure (`docker-compose.yml`)
-- Foundation documentation
+- Node.js/Express bootstrap
+- Safe configuration loading
+- Minimal health endpoint
+- Graceful shutdown lifecycle
+- Generic error boundaries
 
-_Note: Application functionality (Express, React, business logic) is intentionally absent in PR 01 and will be introduced in subsequent PRs._
+_(Previous: PR 01 — Repository & Engineering Foundation)_
