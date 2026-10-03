@@ -970,22 +970,22 @@ This is a conceptual model and not yet a physical schema.
 
 # 38. Core Relationship Summary
 
-| Relationship | Cardinality | Purpose |
-|---|---:|---|
-| Category → Product | 1:N | Categorization |
-| Warehouse → Inventory | 1:N | Warehouse stock |
-| Product → Inventory | 1:N | Product stock across locations |
-| Inventory → Inventory Movement | 1:N | Stock history |
-| Inventory → Reservation | 1:N | Reserved stock |
-| Order → Order Item | 1:N | Order contents |
-| Product → Order Item | 1:N | Products ordered |
-| Supplier ↔ Product | N:M | Supplier-product availability |
-| Product → Forecast | 1:N | Demand predictions |
-| Product → Anomaly | 1:N | Detected anomalies |
-| Product → Risk | 1:N | Product risks |
-| Product → Recommendation | 1:N | Product recommendations |
-| User → Audit Record | 1:N | User/system activity |
-| User → Scenario | 1:N | Scenario ownership |
+| Relationship                   | Cardinality | Purpose                        |
+| ------------------------------ | ----------: | ------------------------------ |
+| Category → Product             |         1:N | Categorization                 |
+| Warehouse → Inventory          |         1:N | Warehouse stock                |
+| Product → Inventory            |         1:N | Product stock across locations |
+| Inventory → Inventory Movement |         1:N | Stock history                  |
+| Inventory → Reservation        |         1:N | Reserved stock                 |
+| Order → Order Item             |         1:N | Order contents                 |
+| Product → Order Item           |         1:N | Products ordered               |
+| Supplier ↔ Product             |         N:M | Supplier-product availability  |
+| Product → Forecast             |         1:N | Demand predictions             |
+| Product → Anomaly              |         1:N | Detected anomalies             |
+| Product → Risk                 |         1:N | Product risks                  |
+| Product → Recommendation       |         1:N | Product recommendations        |
+| User → Audit Record            |         1:N | User/system activity           |
+| User → Scenario                |         1:N | Scenario ownership             |
 
 ---
 
@@ -993,25 +993,25 @@ This is a conceptual model and not yet a physical schema.
 
 Each domain should have clear ownership of its primary data.
 
-| Data | Primary Owner |
-|---|---|
-| User identity | Identity/Auth domain |
-| Product | Product domain |
-| Category | Product domain |
-| Warehouse | Warehouse domain |
-| Inventory | Inventory domain |
-| Inventory movements | Inventory domain |
-| Reservations | Inventory/Order boundary |
-| Orders | Order domain |
-| Order items | Order domain |
-| Supplier | Supplier domain |
+| Data                   | Primary Owner               |
+| ---------------------- | --------------------------- |
+| User identity          | Identity/Auth domain        |
+| Product                | Product domain              |
+| Category               | Product domain              |
+| Warehouse              | Warehouse domain            |
+| Inventory              | Inventory domain            |
+| Inventory movements    | Inventory domain            |
+| Reservations           | Inventory/Order boundary    |
+| Orders                 | Order domain                |
+| Order items            | Order domain                |
+| Supplier               | Supplier domain             |
 | Supplier relationships | Supplier/Procurement domain |
-| Forecasts | Intelligence domain |
-| Anomalies | Intelligence domain |
-| Risks | Intelligence domain |
-| Recommendations | Decision-support domain |
-| Scenarios | Simulation domain |
-| Audit records | Audit/Platform domain |
+| Forecasts              | Intelligence domain         |
+| Anomalies              | Intelligence domain         |
+| Risks                  | Intelligence domain         |
+| Recommendations        | Decision-support domain     |
+| Scenarios              | Simulation domain           |
+| Audit records          | Audit/Platform domain       |
 
 Ownership must be respected when accessing or modifying data.
 

@@ -1,0 +1,17 @@
+{
+  "name": "@stockpilot/config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "StockPilot centralized configuration infrastructure — see PR 07",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"Lint not yet configured — see PR 07\"",
+    "test": "echo \"Tests not yet configured — see PR 09\""
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

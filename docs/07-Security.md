@@ -288,16 +288,16 @@ The final role model must be defined by the authoritative security and product d
 
 Conceptually:
 
-| Operation | Administrator | Inventory Manager | Warehouse Operator | Procurement Manager |
-|---|---:|---:|---:|---:|
-| View Inventory | Yes | Yes | Yes | As permitted |
-| Adjust Inventory | Yes | Yes | Controlled | No |
-| Transfer Inventory | Yes | Yes | Controlled | No |
-| Manage Products | Yes | Yes | No | No |
-| Manage Suppliers | Yes | Controlled | No | Yes |
-| Review Recommendations | Yes | Yes | No | Yes |
-| Approve Procurement Action | Yes | Controlled | No | Yes |
-| Manage Users | Yes | No | No | No |
+| Operation                  | Administrator | Inventory Manager | Warehouse Operator | Procurement Manager |
+| -------------------------- | ------------: | ----------------: | -----------------: | ------------------: |
+| View Inventory             |           Yes |               Yes |                Yes |        As permitted |
+| Adjust Inventory           |           Yes |               Yes |         Controlled |                  No |
+| Transfer Inventory         |           Yes |               Yes |         Controlled |                  No |
+| Manage Products            |           Yes |               Yes |                 No |                  No |
+| Manage Suppliers           |           Yes |        Controlled |                 No |                 Yes |
+| Review Recommendations     |           Yes |               Yes |                 No |                 Yes |
+| Approve Procurement Action |           Yes |        Controlled |                 No |                 Yes |
+| Manage Users               |           Yes |                No |                 No |                  No |
 
 This table is illustrative. The final permission matrix must be explicitly approved before implementation.
 

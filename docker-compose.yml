@@ -1,0 +1,52 @@
+services:
+  # ─── PostgreSQL ────────────────────────────────────────────────────────
+  # Development database. Production uses a managed service.
+  postgres:
+    image: postgres:16-alpine
+    container_name: stockpilot-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-stockpilot_db}
+      POSTGRES_USER: ${POSTGRES_USER:-stockpilot_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stockpilot_dev_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-stockpilot_user} -d ${POSTGRES_DB:-stockpilot_db}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ─── Redis ─────────────────────────────────────────────────────────────
+  # Development cache and queue backend.
+  redis:
+    image: redis:7-alpine
+    container_name: stockpilot-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ─── Future services (added by later PRs) ─────────────────────────────
+  # api:    (PR 02 — Backend Application Bootstrap)
+  # web:    (PR 03 — Frontend Application Bootstrap)
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

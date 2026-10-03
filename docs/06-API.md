@@ -164,12 +164,12 @@ The exact version prefix must not be assumed until it is approved.
 
 The API should use HTTP methods according to their intended semantics.
 
-| Method | Purpose |
-|---|---|
-| GET | Retrieve information |
-| POST | Create a resource or perform a business action |
-| PUT | Replace/update a resource where appropriate |
-| PATCH | Partially update a resource where appropriate |
+| Method | Purpose                                        |
+| ------ | ---------------------------------------------- |
+| GET    | Retrieve information                           |
+| POST   | Create a resource or perform a business action |
+| PUT    | Replace/update a resource where appropriate    |
+| PATCH  | Partially update a resource where appropriate  |
 | DELETE | Remove/deactivate a resource where appropriate |
 
 Business actions may use action-oriented endpoints when they cannot be represented cleanly as generic resource updates.

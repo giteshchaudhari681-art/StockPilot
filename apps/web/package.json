@@ -1,0 +1,15 @@
+{
+  "name": "@stockpilot/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "StockPilot frontend web application",
+  "scripts": {
+    "build": "echo \"Frontend build not yet configured — see PR 03\"",
+    "typecheck": "echo \"TypeCheck not yet configured — see PR 03\"",
+    "lint": "echo \"Lint not yet configured — see PR 03\"",
+    "test": "echo \"Tests not yet configured — see PR 09\""
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
