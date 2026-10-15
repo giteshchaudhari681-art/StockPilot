@@ -12,11 +12,15 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
+    "prepare": "npm run build -w @stockpilot/shared",
+    "prebuild": "npm run build -w @stockpilot/shared",
     "build": "npm run build --workspaces --if-present",
+    "pretypecheck": "npm run build -w @stockpilot/shared",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\" --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\" --ignore-path .gitignore",
+    "pretest": "npm run build -w @stockpilot/shared",
     "test": "npm run test --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present && rimraf node_modules"
   },
