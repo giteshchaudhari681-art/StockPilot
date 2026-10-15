@@ -24,10 +24,11 @@ export function errorHandler(
 
   const log = req.log || logger;
   const correlationId = req.correlationId;
+  const currentEnv = req.app?.get("env") || config.nodeEnv;
   const { statusCode, responseBody, logLevel } = mapErrorToHttpResponse(
     err,
     correlationId,
-    config.nodeEnv,
+    currentEnv,
   );
 
   const errorMetadata = {
