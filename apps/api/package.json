@@ -15,7 +15,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "lint": "echo \"Lint not yet configured — see PR 02\"",
-    "test": "node --test \"test/**/*.test.js\"",
+    "test": "node --test test/*.test.js",
     "test:unit": "node --test \"test/config.test.js\" \"test/test-infrastructure.test.js\"",
     "test:integration": "node --test \"test/api-foundation.test.js\" \"test/error-integration.test.js\" \"test/logging-integration.test.js\""
   },
