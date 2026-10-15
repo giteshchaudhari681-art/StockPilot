@@ -1,30 +1,34 @@
+import { Server } from "http";
 import { createApp } from "./app.js";
 import { config } from "./config/env.js";
-import { Server } from "http";
+import { logger } from "./logger.js";
 
 function startServer() {
   try {
     const app = createApp();
-    const { port, host, nodeEnv } = config;
+    const { port, host, nodeEnv, logLevel } = config;
 
     const server: Server = app.listen(port, host, () => {
-      console.log(`[Backend] Server listening at http://${host}:${port}`);
-      console.log(`[Backend] Environment: ${nodeEnv}`);
+      logger.info(
+        { host, port, nodeEnv, logLevel },
+        `Server listening at http://${host}:${port}`,
+      );
     });
 
     // Graceful shutdown handling
     const shutdown = (signal: string) => {
-      console.log(
-        `\n[Backend] Received ${signal}. Shutting down gracefully...`,
+      logger.info(
+        { signal },
+        `Received ${signal}. Shutting down gracefully...`,
       );
       server.close(() => {
-        console.log("[Backend] HTTP server closed.");
+        logger.info("HTTP server closed.");
         process.exit(0);
       });
 
       // Force shutdown if it takes too long
       setTimeout(() => {
-        console.error("[Backend] Forced shutdown due to timeout.");
+        logger.fatal("Forced shutdown due to timeout.");
         process.exit(1);
       }, 10000).unref();
     };
@@ -32,7 +36,7 @@ function startServer() {
     process.on("SIGTERM", () => shutdown("SIGTERM"));
     process.on("SIGINT", () => shutdown("SIGINT"));
   } catch (error) {
-    console.error("[Backend] Failed to start server:", error);
+    logger.fatal({ err: error }, "Failed to start server");
     process.exit(1);
   }
 }

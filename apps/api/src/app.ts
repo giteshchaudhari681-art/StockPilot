@@ -1,11 +1,15 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-import { healthRouter } from "./routes/health.js";
+import { correlationMiddleware } from "./middleware/correlation.js";
 import { errorHandler } from "./middleware/error-handler.js";
+import { requestLogger } from "./middleware/request-logger.js";
+import { healthRouter } from "./routes/health.js";
 
 export function createApp(): Application {
   const app = express();
 
-  // Middleware
+  // Foundational middleware
+  app.use(correlationMiddleware);
+  app.use(requestLogger);
   app.use(express.json());
 
   // Routes

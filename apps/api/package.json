@@ -1,6 +1,7 @@
 {
   "name": "@stockpilot/api",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "description": "StockPilot backend API application",
   "main": "dist/index.js",
@@ -11,9 +12,11 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
-    "lint": "echo \"Lint not yet configured — see PR 02\""
+    "lint": "echo \"Lint not yet configured — see PR 02\"",
+    "test": "node --test"
   },
   "dependencies": {
+    "@stockpilot/shared": "*",
     "express": "^4.21.0"
   },
   "devDependencies": {

@@ -37,9 +37,15 @@ test("@stockpilot/shared public API exports", async (t) => {
     const exportedKeys = Object.keys(shared).sort();
     const expectedKeys = [
       "APP_METADATA",
+      "DEFAULT_LOG_LEVEL",
+      "DEFAULT_REDACT_KEYS",
       "HEALTH_STATUS",
+      "LOG_LEVEL_SEVERITY",
       "PAGINATION_DEFAULTS",
       "SORT_ORDER",
+      "VALID_LOG_LEVELS",
+      "createLogger",
+      "serializeError",
     ].sort();
 
     assert.deepEqual(exportedKeys, expectedKeys);

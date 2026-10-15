@@ -1,7 +1,11 @@
+import type { LogLevel } from "@stockpilot/shared";
+import { VALID_LOG_LEVELS } from "@stockpilot/shared";
+
 export interface AppConfig {
   nodeEnv: "development" | "test" | "production";
   port: number;
   host: string;
+  logLevel: LogLevel;
 }
 
 export function validateEnv(): AppConfig {
@@ -27,10 +31,25 @@ export function validateEnv(): AppConfig {
     );
   }
 
+  const defaultLogLevel: LogLevel =
+    nodeEnv === "development" ? "debug" : "info";
+  const rawLogLevel = process.env["LOG_LEVEL"];
+  let logLevel: LogLevel = defaultLogLevel;
+
+  if (rawLogLevel) {
+    if (!VALID_LOG_LEVELS.includes(rawLogLevel as LogLevel)) {
+      throw new Error(
+        `Invalid LOG_LEVEL: must be one of ${VALID_LOG_LEVELS.join(", ")}. Received: ${rawLogLevel}`,
+      );
+    }
+    logLevel = rawLogLevel as LogLevel;
+  }
+
   return {
     nodeEnv: nodeEnv as "development" | "test" | "production",
     port,
     host,
+    logLevel,
   };
 }
 

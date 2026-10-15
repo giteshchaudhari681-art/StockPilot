@@ -9,3 +9,6 @@ export * from "./constants/index.js";
 
 // Shared types and contracts
 export * from "./types/index.js";
+
+// Logging foundation
+export * from "./logger/index.js";

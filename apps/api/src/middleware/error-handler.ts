@@ -1,13 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import { config } from "../config/env.js";
 
+import { logger } from "../logger.js";
+
 export function errorHandler(
   err: Error,
-  _req: Request,
+  req: Request,
   res: Response,
   _next: NextFunction,
 ): void {
-  console.error("[Error Boundary Caught Unhandled Exception]:", err);
+  const log = req.log || logger;
+  log.error({ err }, "Unhandled exception caught by error boundary");
 
   const statusCode = 500;
   const errorResponse: Record<string, unknown> = {
