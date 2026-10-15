@@ -1,27 +1,48 @@
 import { Request, Response, NextFunction } from "express";
 import { config } from "../config/env.js";
-
+import { mapErrorToHttpResponse } from "../errors/http-mapping.js";
 import { logger } from "../logger.js";
 
+/**
+ * Global Express error handling middleware.
+ *
+ * Catches all errors propagated through next(err), maps them to safe,
+ * standardized JSON error envelopes, logs diagnostic context using Pino,
+ * and delegates to Express default handler if response headers are already committed.
+ */
 export function errorHandler(
-  err: Error,
+  err: unknown,
   req: Request,
   res: Response,
-  _next: NextFunction,
+  next: NextFunction,
 ): void {
-  const log = req.log || logger;
-  log.error({ err }, "Unhandled exception caught by error boundary");
-
-  const statusCode = 500;
-  const errorResponse: Record<string, unknown> = {
-    error: "Internal Server Error",
-  };
-
-  // Expose stack trace only in development
-  if (config.nodeEnv === "development") {
-    errorResponse["message"] = err.message;
-    errorResponse["stack"] = err.stack;
+  // If headers have already been sent to client, delegate to built-in Express error handler
+  if (res.headersSent) {
+    next(err);
+    return;
   }
 
-  res.status(statusCode).json(errorResponse);
+  const log = req.log || logger;
+  const correlationId = req.correlationId;
+  const { statusCode, responseBody, logLevel } = mapErrorToHttpResponse(
+    err,
+    correlationId,
+    config.nodeEnv,
+  );
+
+  const errorMetadata = {
+    err,
+    statusCode,
+    code: responseBody.error.code,
+    correlationId,
+  };
+
+  if (logLevel === "warn") {
+    const msg = err instanceof Error ? err.message : "Operational client error";
+    log.warn(errorMetadata, `Operational request failure: ${msg}`);
+  } else {
+    log.error(errorMetadata, "Unhandled exception caught by error boundary");
+  }
+
+  res.status(statusCode).json(responseBody);
 }

@@ -12,3 +12,6 @@ export * from "./types/index.js";
 
 // Logging foundation
 export * from "./logger/index.js";
+
+// Error architecture
+export * from "./errors/index.js";

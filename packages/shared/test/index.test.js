@@ -37,9 +37,13 @@ test("@stockpilot/shared public API exports", async (t) => {
     const exportedKeys = Object.keys(shared).sort();
     const expectedKeys = [
       "APP_METADATA",
+      "AppError",
       "DEFAULT_LOG_LEVEL",
       "DEFAULT_REDACT_KEYS",
+      "DomainError",
+      "ErrorCode",
       "HEALTH_STATUS",
+      "InfrastructureError",
       "LOG_LEVEL_SEVERITY",
       "PAGINATION_DEFAULTS",
       "SORT_ORDER",
