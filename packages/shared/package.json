@@ -20,7 +20,7 @@
     "lint": "eslint src --ext ts --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,json}\"",
-    "test": "node --test test/**/*.test.js",
+    "test": "node --test",
     "clean": "rimraf dist"
   },
   "devDependencies": {
