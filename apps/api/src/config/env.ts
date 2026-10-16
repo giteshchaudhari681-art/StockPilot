@@ -107,14 +107,64 @@ export function validateEnv(env: RawEnvironment = process.env): AppConfig {
       : rawCorsOrigin.trim();
   }
 
+  // 6. DATABASE_URL validation
+  const isProduction = nodeEnv === "production";
+  const isDevelopment = nodeEnv === "development";
+  const isTest = nodeEnv === "test";
+
+  const rawDatabaseUrl = env["DATABASE_URL"];
+  let databaseUrl: string;
+
+  if (rawDatabaseUrl !== undefined) {
+    const trimmedUrl = rawDatabaseUrl.trim();
+    if (trimmedUrl === "") {
+      issues.push({
+        variable: "DATABASE_URL",
+        reason: "must be a non-empty string when defined",
+        isSensitive: true,
+      });
+      databaseUrl = "";
+    } else {
+      try {
+        const parsed = new URL(trimmedUrl);
+        if (
+          parsed.protocol !== "postgresql:" &&
+          parsed.protocol !== "postgres:"
+        ) {
+          issues.push({
+            variable: "DATABASE_URL",
+            reason: "must use postgresql:// or postgres:// protocol",
+            isSensitive: true,
+          });
+        }
+      } catch {
+        issues.push({
+          variable: "DATABASE_URL",
+          reason: "must be a valid PostgreSQL connection URL",
+          isSensitive: true,
+        });
+      }
+      databaseUrl = trimmedUrl;
+    }
+  } else if (isProduction) {
+    issues.push({
+      variable: "DATABASE_URL",
+      reason: "is required in production environment",
+      isSensitive: true,
+    });
+    databaseUrl = "";
+  } else if (isTest) {
+    databaseUrl =
+      "postgresql://postgres:postgres@127.0.0.1:5432/stockpilot_test";
+  } else {
+    databaseUrl =
+      "postgresql://postgres:postgres@localhost:5432/stockpilot_dev";
+  }
+
   // If any configuration issues were found, halt immediately with aggregated diagnostic error
   if (issues.length > 0) {
     throw new ConfigurationError(issues);
   }
-
-  const isProduction = nodeEnv === "production";
-  const isDevelopment = nodeEnv === "development";
-  const isTest = nodeEnv === "test";
 
   const config: AppConfig = {
     server: Object.freeze({
@@ -136,12 +186,16 @@ export function validateEnv(env: RawEnvironment = process.env): AppConfig {
       name: APP_METADATA.NAME,
       version: APP_METADATA.VERSION,
     }),
+    database: Object.freeze({
+      url: databaseUrl,
+    }),
 
     // Flattened convenience accessors
     nodeEnv,
     port,
     host,
     logLevel,
+    databaseUrl,
     isProduction,
     isDevelopment,
     isTest,

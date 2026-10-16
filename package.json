@@ -22,7 +22,9 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\" --ignore-path .gitignore",
     "pretest": "npm run build -w @stockpilot/shared",
     "test": "npm run test --workspaces --if-present",
-    "clean": "npm run clean --workspaces --if-present && rimraf node_modules"
+    "clean": "npm run clean --workspaces --if-present && rimraf node_modules",
+    "prisma:generate": "npm run prisma:generate -w @stockpilot/api",
+    "prisma:validate": "npm run prisma:validate -w @stockpilot/api"
   },
   "devDependencies": {
     "prettier": "^3.5.1",

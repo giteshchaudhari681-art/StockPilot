@@ -25,6 +25,10 @@ export interface AppMetadataConfig {
   version: string;
 }
 
+export interface DatabaseConfig {
+  url: string;
+}
+
 /**
  * Canonical centralized application configuration schema.
  */
@@ -33,12 +37,14 @@ export interface AppConfig {
   logging: LogConfig;
   cors: CorsConfig;
   metadata: AppMetadataConfig;
+  database: DatabaseConfig;
 
   // Flattened convenience accessors preserving backward compatibility
   nodeEnv: Environment;
   port: number;
   host: string;
   logLevel: LogLevel;
+  databaseUrl: string;
   isProduction: boolean;
   isDevelopment: boolean;
   isTest: boolean;
