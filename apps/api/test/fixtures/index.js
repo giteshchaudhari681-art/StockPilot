@@ -50,12 +50,20 @@ export function createTestAppConfig(overrides = {}) {
       name: TEST_CONSTANTS.APP_NAME,
       version: TEST_CONSTANTS.APP_VERSION,
     }),
+    database: Object.freeze({
+      url:
+        overrides.databaseUrl ||
+        "postgresql://postgres:postgres@127.0.0.1:5432/stockpilot_test",
+    }),
 
     // Flattened convenience accessors
     nodeEnv,
     port,
     host,
     logLevel,
+    databaseUrl:
+      overrides.databaseUrl ||
+      "postgresql://postgres:postgres@127.0.0.1:5432/stockpilot_test",
     isProduction,
     isDevelopment,
     isTest,

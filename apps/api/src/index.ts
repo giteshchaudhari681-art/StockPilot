@@ -1,6 +1,7 @@
 import { Server } from "http";
 import { createApp } from "./app.js";
 import { config } from "./config/env.js";
+import { disconnectDatabase } from "./db/index.js";
 import { logger } from "./logger.js";
 
 function startServer() {
@@ -16,11 +17,21 @@ function startServer() {
     });
 
     // Graceful shutdown handling
-    const shutdown = (signal: string) => {
+    const shutdown = async (signal: string) => {
       logger.info(
         { signal },
         `Received ${signal}. Shutting down gracefully...`,
       );
+
+      try {
+        await disconnectDatabase();
+      } catch (dbErr) {
+        logger.error(
+          { err: dbErr },
+          "Error disconnecting database during shutdown",
+        );
+      }
+
       server.close(() => {
         logger.info("HTTP server closed.");
         process.exit(0);

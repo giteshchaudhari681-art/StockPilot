@@ -51,15 +51,29 @@ test("Configuration Architecture - Unit Tests", async (t) => {
     () => {
       const config = validateEnv({
         NODE_ENV: "production",
+        DATABASE_URL:
+          "postgresql://prod_user:prod_secret@db.internal:5432/stockpilot_prod",
       });
 
       assert.equal(config.nodeEnv, "production");
       assert.equal(config.port, 4000);
       assert.equal(config.host, "0.0.0.0");
       assert.equal(config.logLevel, "info");
+      assert.equal(
+        config.database.url,
+        "postgresql://prod_user:prod_secret@db.internal:5432/stockpilot_prod",
+      );
+      assert.equal(
+        config.databaseUrl,
+        "postgresql://prod_user:prod_secret@db.internal:5432/stockpilot_prod",
+      );
       assert.equal(config.isProduction, true);
       assert.equal(config.isDevelopment, false);
       assert.equal(config.isTest, false);
+      assert.ok(
+        Object.isFrozen(config.database),
+        "Config database sub-object must be frozen",
+      );
     },
   );
 
@@ -246,6 +260,106 @@ test("Configuration Architecture - Unit Tests", async (t) => {
       errorWithSecret.message.includes("super_secret_pw"),
       false,
       "Secret passwords must never appear in error message",
+    );
+  });
+
+  await t.test(
+    "provides deterministic default DATABASE_URL for development and test",
+    () => {
+      const devConfig = validateEnv({ NODE_ENV: "development" });
+      assert.equal(
+        devConfig.database.url,
+        "postgresql://postgres:postgres@localhost:5432/stockpilot_dev",
+      );
+      assert.equal(
+        devConfig.databaseUrl,
+        "postgresql://postgres:postgres@localhost:5432/stockpilot_dev",
+      );
+
+      const testConfig = validateEnv({ NODE_ENV: "test" });
+      assert.equal(
+        testConfig.database.url,
+        "postgresql://postgres:postgres@127.0.0.1:5432/stockpilot_test",
+      );
+      assert.equal(
+        testConfig.databaseUrl,
+        "postgresql://postgres:postgres@127.0.0.1:5432/stockpilot_test",
+      );
+    },
+  );
+
+  await t.test("rejects missing DATABASE_URL in production environment", () => {
+    assert.throws(
+      () => {
+        validateEnv({
+          NODE_ENV: "production",
+        });
+      },
+      (err) => {
+        assert.ok(err instanceof ConfigurationError);
+        assert.equal(err.issues[0]?.variable, "DATABASE_URL");
+        assert.match(err.issues[0]?.reason ?? "", /required in production/);
+        return true;
+      },
+    );
+  });
+
+  await t.test("rejects empty DATABASE_URL string", () => {
+    assert.throws(
+      () => {
+        validateEnv({
+          DATABASE_URL: "   ",
+        });
+      },
+      (err) => {
+        assert.ok(err instanceof ConfigurationError);
+        assert.equal(err.issues[0]?.variable, "DATABASE_URL");
+        assert.match(err.issues[0]?.reason ?? "", /non-empty/);
+        return true;
+      },
+    );
+  });
+
+  await t.test(
+    "rejects invalid protocol in DATABASE_URL with secret redaction",
+    () => {
+      assert.throws(
+        () => {
+          validateEnv({
+            DATABASE_URL:
+              "mysql://secret_user:secret_pass@127.0.0.1:3306/stockpilot",
+          });
+        },
+        (err) => {
+          assert.ok(err instanceof ConfigurationError);
+          assert.equal(err.issues[0]?.variable, "DATABASE_URL");
+          assert.match(err.issues[0]?.reason ?? "", /protocol/);
+          assert.match(err.message, /\[REDACTED\]/);
+          assert.equal(err.message.includes("secret_pass"), false);
+          return true;
+        },
+      );
+    },
+  );
+
+  await t.test("rejects malformed DATABASE_URL with secret redaction", () => {
+    assert.throws(
+      () => {
+        validateEnv({
+          DATABASE_URL: "not a valid url with secret_token_123",
+        });
+      },
+      (err) => {
+        assert.ok(err instanceof ConfigurationError);
+        assert.equal(err.issues[0]?.variable, "DATABASE_URL");
+        assert.match(
+          err.issues[0]?.reason ?? "",
+          /valid PostgreSQL connection URL/,
+        );
+        assert.match(err.message, /\[REDACTED\]/);
+        assert.equal(err.message.includes("secret_token_123"), false);
+        return true;
+      },
     );
   });
 });
