@@ -19,7 +19,7 @@
     "lint": "echo \"Lint not yet configured — see PR 02\"",
     "pretest": "npm run prisma:generate",
     "test": "node --test test/*.test.js",
-    "test:unit": "node --test \"test/config.test.js\" \"test/test-infrastructure.test.js\" \"test/database-foundation.test.js\"",
+    "test:unit": "node --test \"test/config.test.js\" \"test/test-infrastructure.test.js\" \"test/database-foundation.test.js\" \"test/core-database-schema.test.js\"",
     "test:integration": "node --test \"test/api-foundation.test.js\" \"test/error-integration.test.js\" \"test/logging-integration.test.js\""
   },
   "dependencies": {

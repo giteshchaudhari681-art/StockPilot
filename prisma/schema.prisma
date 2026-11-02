@@ -2,7 +2,8 @@
 // Datasource: PostgreSQL
 // ORM: Prisma
 // PR 11 — Prisma Foundation (Datasource and Generator Configuration)
-// Domain entities (User, Product, Warehouse, Order, etc.) are established incrementally in PR 12–PR 19
+// PR 12 — Core Database Schema (User Identity and Role Definitions)
+// Domain entities (Product, Warehouse, Order, etc.) are established incrementally in PR 13–PR 19
 
 generator client {
   provider = "prisma-client-js"
@@ -11,4 +12,26 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  INVENTORY_MANAGER
+  WAREHOUSE_OPERATOR
+  PROCUREMENT_MANAGER
+  OPERATIONS_MANAGER
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(WAREHOUSE_OPERATOR)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([role])
+  @@map("users")
 }
