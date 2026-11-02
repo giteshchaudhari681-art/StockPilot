@@ -8,3 +8,5 @@ export {
   resetPrismaClient,
   type PrismaClientOptions,
 } from "./client.js";
+
+export { Role, type User } from "@prisma/client";
